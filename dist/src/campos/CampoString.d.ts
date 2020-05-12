@@ -4,7 +4,7 @@ interface CampoStringConfig extends CampoConfig {
 }
 declare class CampoString extends Campo {
     private password;
-    constructor(nome: string, config: CampoStringConfig);
+    constructor(nome: string, config?: CampoStringConfig);
     getDados(valor: any, key: string): Dados;
     getValorSql(valor: any): string;
 }
