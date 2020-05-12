@@ -10,7 +10,7 @@ class CampoString extends Campo {
 
   private password: boolean;
 
-  constructor(nome: string, config: CampoStringConfig) {
+  constructor(nome: string, config?: CampoStringConfig) {
     super(nome);
 
     this.password = false;
