@@ -33,9 +33,17 @@ const SupremusCore = {
     }
   },
 
-  async modelConsultar(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>[] | Record<string, any> | undefined> {
+  async modelConsultar(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>[]> {
     try {
       return await new Consulta().consultar(config, dao);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  async modelConsultarArray(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>> {
+    try {
+      return await new Consulta().consultarArray(config, dao);
     } catch (error) {
       throw new Error(error);
     }
@@ -57,7 +65,7 @@ const SupremusCore = {
     }
   },
 
-  async modelConsultarPaginado(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<{ totalReg: number, data: Record<string, any>[] } | undefined> {
+  async modelConsultarPaginado(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<{ totalReg: number, data: Record<string, any>[] }> {
     try {
       if (config instanceof Array) {
         throw new Error('Consulta paginada não pode ser um array.');

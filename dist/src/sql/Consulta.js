@@ -59,7 +59,53 @@ var Consulta = /** @class */ (function () {
     }
     Consulta.prototype.consultar = function (config, dao) {
         return __awaiter(this, void 0, void 0, function () {
-            var openDao, rowsResult, config_1, config_1_1, c, dados_1, rows_1, _a, _b, e_1_1, dados, rows, error_1;
+            var openDao, dados, rows, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        openDao = (dao === undefined);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 8, 9, 10]);
+                        if (!(openDao === true)) return [3 /*break*/, 3];
+                        dao = new DAO_1.default();
+                        return [4 /*yield*/, dao.openConexao()];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3:
+                        if (config instanceof Array) {
+                            throw new Error('Consulta padrao não pode ser um array.');
+                        }
+                        dados = new SqlConsulta_1.default().getDadosConsulta(config);
+                        return [4 /*yield*/, dao.executarSql(dados.sql)];
+                    case 4:
+                        rows = _a.sent();
+                        if (!config.subConsultas) return [3 /*break*/, 6];
+                        return [4 /*yield*/, this._subConsulta(dao, dados.campos, config.subConsultas, rows)];
+                    case 5:
+                        _a.sent();
+                        _a.label = 6;
+                    case 6: return [4 /*yield*/, ModelConverter_1.ModelConverter.criarModelConsulta(dados.configs, dados.campos, rows)];
+                    case 7: return [2 /*return*/, _a.sent()];
+                    case 8:
+                        error_1 = _a.sent();
+                        throw new Error(error_1);
+                    case 9:
+                        if (openDao === true) {
+                            if (dao.isConexaoOpen()) {
+                                dao.closeConexao();
+                            }
+                        }
+                        return [7 /*endfinally*/];
+                    case 10: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Consulta.prototype.consultarArray = function (config, dao) {
+        return __awaiter(this, void 0, void 0, function () {
+            var openDao, rowsResult, config_1, config_1_1, c, dados, rows, _a, _b, e_1_1, error_2;
             var e_1, _c;
             return __generator(this, function (_d) {
                 switch (_d.label) {
@@ -67,7 +113,7 @@ var Consulta = /** @class */ (function () {
                         openDao = (dao === undefined);
                         _d.label = 1;
                     case 1:
-                        _d.trys.push([1, 20, 21, 22]);
+                        _d.trys.push([1, 15, 16, 17]);
                         if (!(openDao === true)) return [3 /*break*/, 3];
                         dao = new DAO_1.default();
                         return [4 /*yield*/, dao.openConexao()];
@@ -75,7 +121,9 @@ var Consulta = /** @class */ (function () {
                         _d.sent();
                         _d.label = 3;
                     case 3:
-                        if (!(config instanceof Array)) return [3 /*break*/, 15];
+                        if (!(config instanceof Array)) {
+                            throw new Error('Consulta por array precisa ser um array.');
+                        }
                         rowsResult = {};
                         _d.label = 4;
                     case 4:
@@ -85,19 +133,19 @@ var Consulta = /** @class */ (function () {
                     case 5:
                         if (!!config_1_1.done) return [3 /*break*/, 11];
                         c = config_1_1.value;
-                        dados_1 = new SqlConsulta_1.default().getDadosConsulta(c);
-                        return [4 /*yield*/, dao.executarSql(dados_1.sql)];
+                        dados = new SqlConsulta_1.default().getDadosConsulta(c);
+                        return [4 /*yield*/, dao.executarSql(dados.sql)];
                     case 6:
-                        rows_1 = _d.sent();
+                        rows = _d.sent();
                         if (!c.subConsultas) return [3 /*break*/, 8];
-                        return [4 /*yield*/, this._subConsulta(dao, dados_1.campos, c.subConsultas, rows_1)];
+                        return [4 /*yield*/, this._subConsulta(dao, dados.campos, c.subConsultas, rows)];
                     case 7:
                         _d.sent();
                         _d.label = 8;
                     case 8:
                         _a = rowsResult;
                         _b = c.key;
-                        return [4 /*yield*/, ModelConverter_1.ModelConverter.criarModelConsulta(dados_1.configs, dados_1.campos, rows_1)];
+                        return [4 /*yield*/, ModelConverter_1.ModelConverter.criarModelConsulta(dados.configs, dados.campos, rows)];
                     case 9:
                         _a[_b] = _d.sent();
                         _d.label = 10;
@@ -117,28 +165,16 @@ var Consulta = /** @class */ (function () {
                         return [7 /*endfinally*/];
                     case 14: return [2 /*return*/, rowsResult];
                     case 15:
-                        dados = new SqlConsulta_1.default().getDadosConsulta(config);
-                        return [4 /*yield*/, dao.executarSql(dados.sql)];
+                        error_2 = _d.sent();
+                        throw new Error(error_2);
                     case 16:
-                        rows = _d.sent();
-                        if (!config.subConsultas) return [3 /*break*/, 18];
-                        return [4 /*yield*/, this._subConsulta(dao, dados.campos, config.subConsultas, rows)];
-                    case 17:
-                        _d.sent();
-                        _d.label = 18;
-                    case 18: return [4 /*yield*/, ModelConverter_1.ModelConverter.criarModelConsulta(dados.configs, dados.campos, rows)];
-                    case 19: return [2 /*return*/, _d.sent()];
-                    case 20:
-                        error_1 = _d.sent();
-                        throw new Error(error_1);
-                    case 21:
                         if (openDao === true) {
                             if (dao.isConexaoOpen()) {
                                 dao.closeConexao();
                             }
                         }
                         return [7 /*endfinally*/];
-                    case 22: return [2 /*return*/];
+                    case 17: return [2 /*return*/];
                 }
             });
         });
@@ -146,7 +182,7 @@ var Consulta = /** @class */ (function () {
     Consulta.prototype.consultarPorId = function (config, dao) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var openDao, model, chaveCampo, dados, rows, result, error_2;
+            var openDao, model, chaveCampo, dados, rows, result, error_3;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -182,8 +218,8 @@ var Consulta = /** @class */ (function () {
                         return [2 /*return*/, result[0]];
                     case 8: return [2 /*return*/];
                     case 9:
-                        error_2 = _b.sent();
-                        throw new Error(error_2);
+                        error_3 = _b.sent();
+                        throw new Error(error_3);
                     case 10:
                         if (openDao === true) {
                             if (dao.isConexaoOpen()) {
@@ -198,7 +234,7 @@ var Consulta = /** @class */ (function () {
     };
     Consulta.prototype.consultaPaginada = function (config, dao) {
         return __awaiter(this, void 0, void 0, function () {
-            var openDao, totalReg, dados, rows, rowsT, data, error_3;
+            var openDao, totalReg, dados, rows, rowsT, data, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -229,8 +265,8 @@ var Consulta = /** @class */ (function () {
                         data = _a.sent();
                         return [2 /*return*/, { totalReg: totalReg, data: data }];
                     case 8:
-                        error_3 = _a.sent();
-                        throw new Error(error_3);
+                        error_4 = _a.sent();
+                        throw new Error(error_4);
                     case 9:
                         if (openDao === true) {
                             if (dao.isConexaoOpen()) {
@@ -245,7 +281,7 @@ var Consulta = /** @class */ (function () {
     };
     Consulta.prototype._subConsulta = function (dao, campos, subConsultas, rows) {
         return __awaiter(this, void 0, void 0, function () {
-            var subConsultas_1, subConsultas_1_1, cs, rows_2, rows_2_1, row, subConfig, dadosSub, rowsSub, _a, _b, e_2_1, e_3_1;
+            var subConsultas_1, subConsultas_1_1, cs, rows_1, rows_1_1, row, subConfig, dadosSub, rowsSub, _a, _b, e_2_1, e_3_1;
             var e_3, _c, e_2, _d;
             return __generator(this, function (_e) {
                 switch (_e.label) {
@@ -259,11 +295,11 @@ var Consulta = /** @class */ (function () {
                         _e.label = 2;
                     case 2:
                         _e.trys.push([2, 8, 9, 10]);
-                        rows_2 = (e_2 = void 0, __values(rows)), rows_2_1 = rows_2.next();
+                        rows_1 = (e_2 = void 0, __values(rows)), rows_1_1 = rows_1.next();
                         _e.label = 3;
                     case 3:
-                        if (!!rows_2_1.done) return [3 /*break*/, 7];
-                        row = rows_2_1.value;
+                        if (!!rows_1_1.done) return [3 /*break*/, 7];
+                        row = rows_1_1.value;
                         subConfig = { link: cs.link, campos: campos, row: row };
                         dadosSub = new SqlConsulta_1.default().getDadosConsulta(cs, false, subConfig);
                         return [4 /*yield*/, dao.executarSql(dadosSub.sql)];
@@ -276,7 +312,7 @@ var Consulta = /** @class */ (function () {
                         _a[_b] = _e.sent();
                         _e.label = 6;
                     case 6:
-                        rows_2_1 = rows_2.next();
+                        rows_1_1 = rows_1.next();
                         return [3 /*break*/, 3];
                     case 7: return [3 /*break*/, 10];
                     case 8:
@@ -285,7 +321,7 @@ var Consulta = /** @class */ (function () {
                         return [3 /*break*/, 10];
                     case 9:
                         try {
-                            if (rows_2_1 && !rows_2_1.done && (_d = rows_2.return)) _d.call(rows_2);
+                            if (rows_1_1 && !rows_1_1.done && (_d = rows_1.return)) _d.call(rows_1);
                         }
                         finally { if (e_2) throw e_2.error; }
                         return [7 /*endfinally*/];

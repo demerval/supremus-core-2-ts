@@ -118,7 +118,7 @@ describe('Teste de persistencia de dados', () => {
   });
 
   it('Deletar registro', async () => {
-    let usuario = await SupremusCore.modelConsultar({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } });
+    let usuario = await SupremusCore.modelConsultarPorId({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } });
 
     const config: ConfigPersist = {
       persistir: [

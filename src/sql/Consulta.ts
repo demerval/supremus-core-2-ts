@@ -6,7 +6,7 @@ import { FieldType } from "../enums";
 
 class Consulta {
 
-  async consultar(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>[] | Record<string, any>> {
+  async consultar(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>[]> {
     let openDao = (dao === undefined);
 
     try {
@@ -16,20 +16,7 @@ class Consulta {
       }
 
       if (config instanceof Array) {
-        let rowsResult: Record<string, any> = {};
-
-        for (let c of config) {
-          const dados = new SqlConsulta().getDadosConsulta(c);
-          let rows = await dao!.executarSql(dados.sql);
-
-          if (c.subConsultas) {
-            await this._subConsulta(dao!, dados.campos, c.subConsultas, rows);
-          }
-
-          rowsResult[c.key] = await ModelConverter.criarModelConsulta(dados.configs, dados.campos, rows);
-        }
-
-        return rowsResult;
+        throw new Error('Consulta padrao não pode ser um array.');
       }
 
       const dados = new SqlConsulta().getDadosConsulta(config);
@@ -51,7 +38,45 @@ class Consulta {
     }
   }
 
-  async consultarPorId(config: ItemConsulta, dao?: DAO) {
+  async consultarArray(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>> {
+    let openDao = (dao === undefined);
+
+    try {
+      if (openDao === true) {
+        dao = new DAO();
+        await dao.openConexao();
+      }
+
+      if (!(config instanceof Array)) {
+        throw new Error('Consulta por array precisa ser um array.');
+      }
+
+      let rowsResult: Record<string, any> = {};
+
+      for (let c of config) {
+        const dados = new SqlConsulta().getDadosConsulta(c);
+        let rows = await dao!.executarSql(dados.sql);
+
+        if (c.subConsultas) {
+          await this._subConsulta(dao!, dados.campos, c.subConsultas, rows);
+        }
+
+        rowsResult[c.key] = await ModelConverter.criarModelConsulta(dados.configs, dados.campos, rows);
+      }
+
+      return rowsResult;
+    } catch (error) {
+      throw new Error(error);
+    } finally {
+      if (openDao === true) {
+        if (dao!.isConexaoOpen()) {
+          dao!.closeConexao();
+        }
+      }
+    }
+  }
+
+  async consultarPorId(config: ItemConsulta, dao?: DAO): Promise<Record<string, any> | undefined> {
     let openDao = (dao === undefined);
 
     try {
@@ -90,7 +115,7 @@ class Consulta {
     }
   }
 
-  async consultaPaginada(config: ItemConsulta, dao?: DAO) {
+  async consultaPaginada(config: ItemConsulta, dao?: DAO): Promise<{ totalReg: number, data: Record<string, any>[] }> {
     let openDao = (dao === undefined);
 
     try {
