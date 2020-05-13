@@ -8,6 +8,7 @@ declare class Model {
     private versao;
     private verificar;
     constructor(nome: String, nomeTabela: String, campos: Map<string, Campo>, versao?: number, verificar?: boolean);
+    addCampo(nome: string, campo: Campo): void;
     isVerificar(): boolean;
     getNome(): string;
     getNomeTabela(): string;

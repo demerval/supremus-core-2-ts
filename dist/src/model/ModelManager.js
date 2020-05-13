@@ -21,6 +21,9 @@ var ModelManager = /** @class */ (function () {
     ModelManager.getModels = function () {
         return models.values();
     };
+    ModelManager.clearModels = function () {
+        models.clear();
+    };
     return ModelManager;
 }());
 exports.default = ModelManager;

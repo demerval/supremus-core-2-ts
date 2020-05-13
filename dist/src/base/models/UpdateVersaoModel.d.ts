@@ -1,3 +1,3 @@
 import Model from "../../model/Model";
-declare const UpdateVersaoModel: Model;
-export default UpdateVersaoModel;
+declare const _default: Model;
+export default _default;

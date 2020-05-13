@@ -134,7 +134,7 @@ exports.TabelaAjustar = {
                 switch (_a.label) {
                     case 0:
                         sql = "SELECT RDB$RELATION_NAME, RDB$FIELD_NAME FROM RDB$RELATION_FIELDS "
-                            + "WHERE RDB$FIELD_NAME = '" + campo.getNome() + "' AND "
+                            + "WHERE RDB$FIELD_NAME = '" + campo.getNome().toUpperCase() + "' AND "
                             + "RDB$RELATION_NAME = '" + config.nomeTabela + "';";
                         return [4 /*yield*/, dao.executarSql(sql)];
                     case 1:

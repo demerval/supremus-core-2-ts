@@ -14,11 +14,13 @@ class EstruturaVerificar {
     this.dao = new DAO();
   }
 
-  async verificar() {
+  async verificar(verificarPadrao = true) {
     try {
       await this.dao.openConexao();
 
-      await this._verificarTabelasUpdate();
+      if (verificarPadrao) {
+        await this._verificarTabelasUpdate();
+      }
 
       const models = ModelManager.getModels();
       const chavesEstrangeiras = [];
@@ -27,7 +29,7 @@ class EstruturaVerificar {
         if (model.isVerificar() === false) {
           continue;
         }
-        if (model.getNome() === 'updateVersao') {
+        if (model.getNome() === 'updateversao') {
           continue;
         }
 
@@ -69,6 +71,8 @@ class EstruturaVerificar {
     } else {
       await TabelaCriar.criar(this.dao, config);
     }
+
+    return true;
   }
 
 }

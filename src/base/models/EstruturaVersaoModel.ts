@@ -7,6 +7,4 @@ const campos: Map<string, Campo> = new Map();
 campos.set('id', new CampoString('tabela', { obrigatorio: true, chavePrimaria: {} }));
 campos.set('versao', new CampoNumber('versao', { obrigatorio: true }));
 
-const EstruturaVersaoModel = new Model('estruturaVersao', 'estrutura_versao', campos, 1);
-
-export default EstruturaVersaoModel;
+export default new Model('estruturaVersao', 'estrutura_versao', campos, 1);

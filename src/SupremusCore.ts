@@ -1,7 +1,7 @@
 import EstruturaVerificar from "./base/EstruturaVerificar";
 import ModelManager from "./model/ModelManager";
 import Model from "./model/Model";
-import ModelPersiste, { ConfigPersist } from "./model/ModelPersite";
+import ModelPersiste, { ConfigPersist } from "./model/ModelPersiste";
 import DAO from "./database/DAO";
 import Consulta from "./sql/Consulta";
 import { ItemConsulta } from "./sql/SqlConsulta";
@@ -24,7 +24,7 @@ const SupremusCore = {
     return ModelManager.getModel(nome.toLowerCase());
   },
 
-  async modelPersiste(config: ConfigPersist, dao: DAO) {
+  async modelPersiste(config: ConfigPersist, dao?: DAO) {
     try {
       const result = await new ModelPersiste().persistir(config, dao);
       return result;
@@ -33,7 +33,7 @@ const SupremusCore = {
     }
   },
 
-  async modelConsultar(config: ItemConsulta | ItemConsulta[], dao: DAO) {
+  async modelConsultar(config: ItemConsulta | ItemConsulta[], dao?: DAO) {
     try {
       if (config instanceof Array) {
         return await new Consulta().consultar(config, dao);

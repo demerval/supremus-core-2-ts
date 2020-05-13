@@ -81,74 +81,78 @@ var EstruturaVerificar = /** @class */ (function () {
     function EstruturaVerificar() {
         this.dao = new DAO_1.default();
     }
-    EstruturaVerificar.prototype.verificar = function () {
+    EstruturaVerificar.prototype.verificar = function (verificarPadrao) {
+        if (verificarPadrao === void 0) { verificarPadrao = true; }
         return __awaiter(this, void 0, void 0, function () {
             var models, chavesEstrangeiras, models_1, models_1_1, model, config, e_1_1, error_1;
             var e_1, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _b.trys.push([0, 13, 14, 15]);
+                        _b.trys.push([0, 14, 15, 16]);
                         return [4 /*yield*/, this.dao.openConexao()];
                     case 1:
                         _b.sent();
+                        if (!verificarPadrao) return [3 /*break*/, 3];
                         return [4 /*yield*/, this._verificarTabelasUpdate()];
                     case 2:
                         _b.sent();
-                        models = ModelManager_1.default.getModels();
-                        chavesEstrangeiras = [];
                         _b.label = 3;
                     case 3:
-                        _b.trys.push([3, 8, 9, 10]);
-                        models_1 = __values(models), models_1_1 = models_1.next();
+                        models = ModelManager_1.default.getModels();
+                        chavesEstrangeiras = [];
                         _b.label = 4;
                     case 4:
-                        if (!!models_1_1.done) return [3 /*break*/, 7];
+                        _b.trys.push([4, 9, 10, 11]);
+                        models_1 = __values(models), models_1_1 = models_1.next();
+                        _b.label = 5;
+                    case 5:
+                        if (!!models_1_1.done) return [3 /*break*/, 8];
                         model = models_1_1.value;
                         if (model.isVerificar() === false) {
-                            return [3 /*break*/, 6];
+                            return [3 /*break*/, 7];
                         }
-                        if (model.getNome() === 'updateVersao') {
-                            return [3 /*break*/, 6];
+                        if (model.getNome() === 'updateversao') {
+                            return [3 /*break*/, 7];
                         }
                         config = new EstruturaUtil_1.default().prepare(model);
                         if (config.configChaveEstrangeira.length > 0) {
                             chavesEstrangeiras.push.apply(chavesEstrangeiras, __spread(config.configChaveEstrangeira));
                         }
                         return [4 /*yield*/, this._executarVerificacao(config)];
-                    case 5:
-                        _b.sent();
-                        _b.label = 6;
                     case 6:
+                        _b.sent();
+                        _b.label = 7;
+                    case 7:
                         models_1_1 = models_1.next();
-                        return [3 /*break*/, 4];
-                    case 7: return [3 /*break*/, 10];
-                    case 8:
+                        return [3 /*break*/, 5];
+                    case 8: return [3 /*break*/, 11];
+                    case 9:
                         e_1_1 = _b.sent();
                         e_1 = { error: e_1_1 };
-                        return [3 /*break*/, 10];
-                    case 9:
+                        return [3 /*break*/, 11];
+                    case 10:
                         try {
                             if (models_1_1 && !models_1_1.done && (_a = models_1.return)) _a.call(models_1);
                         }
                         finally { if (e_1) throw e_1.error; }
                         return [7 /*endfinally*/];
-                    case 10:
-                        if (!(chavesEstrangeiras.length > 0)) return [3 /*break*/, 12];
-                        return [4 /*yield*/, ChaveEstrangeiraUtil_1.ChaveEstrangeiraUtil.criar(this.dao, chavesEstrangeiras)];
                     case 11:
+                        if (!(chavesEstrangeiras.length > 0)) return [3 /*break*/, 13];
+                        return [4 /*yield*/, ChaveEstrangeiraUtil_1.ChaveEstrangeiraUtil.criar(this.dao, chavesEstrangeiras)];
+                    case 12:
                         _b.sent();
-                        _b.label = 12;
-                    case 12: return [3 /*break*/, 15];
-                    case 13:
+                        _b.label = 13;
+                    case 13: return [3 /*break*/, 16];
+                    case 14:
                         error_1 = _b.sent();
                         throw new Error(typeof error_1 === 'string' ? error_1 : error_1.message);
-                    case 14:
+                    case 15:
                         if (this.dao.isConexaoOpen()) {
                             this.dao.closeConexao();
                         }
                         return [7 /*endfinally*/];
-                    case 15: return [2 /*return*/];
+                    case 16: return [2 /*return*/];
                 }
             });
         });
@@ -192,7 +196,7 @@ var EstruturaVerificar = /** @class */ (function () {
                     case 4:
                         _a.sent();
                         _a.label = 5;
-                    case 5: return [2 /*return*/];
+                    case 5: return [2 /*return*/, true];
                 }
             });
         });

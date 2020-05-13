@@ -18,7 +18,7 @@ export const ChavePrimariaUtil = {
       + "AND RDB$RELATION_NAME = ?";
 
     const rows = await dao.executarSql(sql, [nomeTabela]);
-    return rows.length === 1;
+    return (rows.length === 1);
   },
 
 }

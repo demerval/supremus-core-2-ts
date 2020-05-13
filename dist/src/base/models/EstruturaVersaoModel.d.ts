@@ -1,3 +1,3 @@
 import Model from "../../model/Model";
-declare const EstruturaVersaoModel: Model;
-export default EstruturaVersaoModel;
+declare const _default: Model;
+export default _default;

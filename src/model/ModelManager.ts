@@ -25,6 +25,10 @@ class ModelManager {
   static getModels() {
     return models.values();
   }
+  
+  static clearModels() {
+    models.clear();
+  }
 }
 
 export default ModelManager;

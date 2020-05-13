@@ -2,8 +2,8 @@ import { EstruturaConfig } from "./auxx/EstruturaUtil";
 declare class EstruturaVerificar {
     private dao;
     constructor();
-    verificar(): Promise<void>;
+    verificar(verificarPadrao?: boolean): Promise<void>;
     _verificarTabelasUpdate(): Promise<void>;
-    _executarVerificacao(config: EstruturaConfig): Promise<void>;
+    _executarVerificacao(config: EstruturaConfig): Promise<boolean>;
 }
 export default EstruturaVerificar;

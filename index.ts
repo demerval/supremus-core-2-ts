@@ -7,7 +7,7 @@ import CriptografiaI from './src/base/Criptografia';
 
 import ModelI from './src/model/Model';
 import ModelManagerI from './src/model/ModelManager';
-import ModelPersisteI from './src/model/ModelPersite';
+import ModelPersisteI from './src/model/ModelPersiste';
 import ModelUpdateVersaoUtil from './src/model/ModelUpdateVersaoUtil';
 
 import CampoBooleanI from './src/campos/CampoBoolean';

@@ -24,9 +24,9 @@ export interface ItemPersitConsulta extends ItemConsulta {
 
 class ModelPersiste {
 
-  async persistir(config: ConfigPersist, dao: DAO) {
+  async persistir(config: ConfigPersist, dao?: DAO) {
     let openDao = (dao === undefined);
-
+  
     try {
       if (openDao === true) {
         dao = new DAO();
@@ -48,15 +48,15 @@ class ModelPersiste {
 
         switch (c.status) {
           case Status.INSERT:
-            const itemInsert = await ModelInsert.persiste(dao, model, dados);
+            const itemInsert = await ModelInsert.persiste(dao!, model, dados);
             result[c.id] = itemInsert;
             break;
           case Status.UPDATE:
-            const itemUpdate = await ModelUpdate.persiste(dao, model, dados);
+            const itemUpdate = await ModelUpdate.persiste(dao!, model, dados);
             result[c.id] = itemUpdate;
             break;
           case Status.DELETE:
-            const itemDelete = await ModelDelete.persiste(dao, model, dados);
+            const itemDelete = await ModelDelete.persiste(dao!, model, dados);
             result[c.id] = itemDelete;
             break;
           default:
@@ -75,12 +75,12 @@ class ModelPersiste {
             configConsulta.criterios.push({ campo: idConsulta.campo, valor: result[idConsulta.campoResult[0]][idConsulta.campoResult[1]] });
           }
 
-          result[configConsulta.key] = await new Consulta().consultar(configConsulta, dao);
+          result[configConsulta.key] = await new Consulta().consultar(configConsulta, dao!);
         }
       }
 
       if (openDao === true) {
-        await dao.confirmarTransacao();
+        await dao!.confirmarTransacao();
       }
 
       return result;
@@ -88,8 +88,8 @@ class ModelPersiste {
       throw new Error(error);
     } finally {
       if (openDao === true) {
-        if (dao.isConexaoOpen()) {
-          dao.closeConexao();
+        if (dao!.isConexaoOpen()) {
+          dao!.closeConexao();
         }
       }
     }

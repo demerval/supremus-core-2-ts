@@ -73,6 +73,9 @@ var Model = /** @class */ (function () {
         this.versao = versao;
         this.verificar = verificar;
     }
+    Model.prototype.addCampo = function (nome, campo) {
+        this.campos.set(this.nome, campo);
+    };
     Model.prototype.isVerificar = function () {
         return this.verificar;
     };

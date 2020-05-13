@@ -1,6 +1,6 @@
 import DAO from "../database/DAO";
 import SupremusCore from "../SupremusCore";
-import { ConfigPersist } from "./ModelPersite";
+import { ConfigPersist } from "./ModelPersiste";
 import { Status } from "../enums";
 
 const ModelUpdateVersaoUtil = {

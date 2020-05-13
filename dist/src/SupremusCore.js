@@ -41,7 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var EstruturaVerificar_1 = __importDefault(require("./base/EstruturaVerificar"));
 var ModelManager_1 = __importDefault(require("./model/ModelManager"));
-var ModelPersite_1 = __importDefault(require("./model/ModelPersite"));
+var ModelPersiste_1 = __importDefault(require("./model/ModelPersiste"));
 var Consulta_1 = __importDefault(require("./sql/Consulta"));
 var CarregarModelsUtil_1 = __importDefault(require("./model/auxx/CarregarModelsUtil"));
 var SupremusCore = {
@@ -73,7 +73,7 @@ var SupremusCore = {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, new ModelPersite_1.default().persistir(config, dao)];
+                        return [4 /*yield*/, new ModelPersiste_1.default().persistir(config, dao)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result];

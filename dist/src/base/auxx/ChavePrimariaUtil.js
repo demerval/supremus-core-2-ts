@@ -66,7 +66,7 @@ exports.ChavePrimariaUtil = {
                         return [4 /*yield*/, dao.executarSql(sql, [nomeTabela])];
                     case 1:
                         rows = _a.sent();
-                        return [2 /*return*/, rows.length === 1];
+                        return [2 /*return*/, (rows.length === 1)];
                 }
             });
         });

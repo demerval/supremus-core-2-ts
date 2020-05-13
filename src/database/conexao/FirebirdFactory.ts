@@ -12,7 +12,7 @@ export default class {
         database: process.env.DATABASE,
         user: process.env.USER,
         password: process.env.PASSWORD,
-        lowercase_keys: Boolean(process.env.LOWER_CASE_KEYS),
+        lowercase_keys: false,
         role: process.env.ROLE,
         pageSize: Number(process.env.PAGE_SIZE),
       }

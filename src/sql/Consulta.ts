@@ -6,7 +6,7 @@ import { FieldType } from "../enums";
 
 class Consulta {
 
-  async consultar(config: ItemConsulta | ItemConsulta[], dao: DAO) {
+  async consultar(config: ItemConsulta | ItemConsulta[], dao?: DAO) {
     let openDao = (dao === undefined);
 
     try {
@@ -20,10 +20,10 @@ class Consulta {
 
         for (let c of config) {
           const dados = new SqlConsulta().getDadosConsulta(c);
-          let rows = await dao.executarSql(dados.sql);
+          let rows = await dao!.executarSql(dados.sql);
 
           if (c.subConsultas) {
-            await this._subConsulta(dao, dados.campos, c.subConsultas, rows);
+            await this._subConsulta(dao!, dados.campos, c.subConsultas, rows);
           }
 
           rowsResult[c.key] = await ModelConverter.criarModelConsulta(dados.configs, dados.campos, rows);
@@ -33,10 +33,10 @@ class Consulta {
       }
 
       const dados = new SqlConsulta().getDadosConsulta(config);
-      let rows = await dao.executarSql(dados.sql);
+      let rows = await dao!.executarSql(dados.sql);
 
       if (config.subConsultas) {
-        await this._subConsulta(dao, dados.campos, config.subConsultas, rows);
+        await this._subConsulta(dao!, dados.campos, config.subConsultas, rows);
       }
 
       return await ModelConverter.criarModelConsulta(dados.configs, dados.campos, rows);
@@ -44,14 +44,14 @@ class Consulta {
       throw new Error(error);
     } finally {
       if (openDao === true) {
-        if (dao.isConexaoOpen()) {
-          dao.closeConexao();
+        if (dao!.isConexaoOpen()) {
+          dao!.closeConexao();
         }
       }
     }
   }
 
-  async consultarPorId(config: ItemConsulta, dao: DAO) {
+  async consultarPorId(config: ItemConsulta, dao?: DAO) {
     let openDao = (dao === undefined);
 
     try {
@@ -67,10 +67,10 @@ class Consulta {
       config.criterios = [{ campo: chaveCampo[0], valor: config.porId?.id }];
 
       const dados = new SqlConsulta().getDadosConsulta(config);
-      let rows = await dao.executarSql(dados.sql);
+      let rows = await dao!.executarSql(dados.sql);
 
       if (config.subConsultas) {
-        await this._subConsulta(dao, dados.campos, config.subConsultas, rows);
+        await this._subConsulta(dao!, dados.campos, config.subConsultas, rows);
       }
 
       if (rows.length > 0) {
@@ -83,14 +83,14 @@ class Consulta {
       throw new Error(error);
     } finally {
       if (openDao === true) {
-        if (dao.isConexaoOpen()) {
-          dao.closeConexao();
+        if (dao!.isConexaoOpen()) {
+          dao!.closeConexao();
         }
       }
     }
   }
 
-  async consultaPaginada(config: ItemConsulta, dao: DAO) {
+  async consultaPaginada(config: ItemConsulta, dao?: DAO) {
     let openDao = (dao === undefined);
 
     try {
@@ -101,9 +101,9 @@ class Consulta {
 
       let totalReg = 0;
       const dados = new SqlConsulta().getDadosConsulta(config, true);
-      const rows = await dao.executarSql(dados.sql);
+      const rows = await dao!.executarSql(dados.sql);
       if (rows.length > 0) {
-        let rowsT = await dao.executarSql(dados.sqlTotal!);
+        let rowsT = await dao!.executarSql(dados.sqlTotal!);
         totalReg = parseInt(rowsT[0].TOTAL, 0);
       }
 
@@ -113,8 +113,8 @@ class Consulta {
       throw new Error(error);
     } finally {
       if (openDao === true) {
-        if (dao.isConexaoOpen()) {
-          dao.closeConexao();
+        if (dao!.isConexaoOpen()) {
+          dao!.closeConexao();
         }
       }
     }

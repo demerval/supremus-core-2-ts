@@ -18,6 +18,10 @@ class Model {
     this.verificar = verificar;
   }
 
+  addCampo(nome: string, campo: Campo) {
+    this.campos.set(this.nome, campo);
+  }
+
   isVerificar() {
     return this.verificar;
   }
