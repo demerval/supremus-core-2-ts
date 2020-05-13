@@ -207,7 +207,7 @@ describe('Teste de persistencia de dados', function () {
         var usuario, config, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, SupremusCore_1.default.modelConsultar({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } })];
+                case 0: return [4 /*yield*/, SupremusCore_1.default.modelConsultarPorId({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } })];
                 case 1:
                     usuario = _a.sent();
                     usuario.nome = 'suporte 2';

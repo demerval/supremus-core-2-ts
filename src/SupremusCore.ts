@@ -33,19 +33,41 @@ const SupremusCore = {
     }
   },
 
-  async modelConsultar(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>[] | Record<string, any> | { totalReg: number, data: Record<string, any>[] } | undefined> {
+  async modelConsultar(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>[] | Record<string, any> | undefined> {
+    try {
+      return await new Consulta().consultar(config, dao);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  async modelConsultarPorId(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any> | undefined> {
     try {
       if (config instanceof Array) {
-        return await new Consulta().consultar(config, dao);
-      }
-      if (config.porId) {
-        return await new Consulta().consultarPorId(config, dao);
-      }
-      if (config.paginado) {
-        return await new Consulta().consultaPaginada(config, dao);
+        throw new Error('Consulta por id não pode ser um array.');
       }
 
-      return await new Consulta().consultar(config, dao);
+      if (config.porId === undefined) {
+        throw new Error('Erro na configuração da consulta porId.');
+      }
+
+      return await new Consulta().consultarPorId(config, dao);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  async modelConsultarPaginado(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<{ totalReg: number, data: Record<string, any>[] } | undefined> {
+    try {
+      if (config instanceof Array) {
+        throw new Error('Consulta paginada não pode ser um array.');
+      }
+
+      if (config.paginado === undefined) {
+        throw new Error('Erro na configuração da consulta paginada.');
+      }
+
+      return await new Consulta().consultaPaginada(config, dao);
     } catch (error) {
       throw new Error(error);
     }

@@ -91,24 +91,59 @@ var SupremusCore = {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 8, , 9]);
-                        if (!(config instanceof Array)) return [3 /*break*/, 2];
+                        _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, new Consulta_1.default().consultar(config, dao)];
                     case 1: return [2 /*return*/, _a.sent()];
                     case 2:
-                        if (!config.porId) return [3 /*break*/, 4];
-                        return [4 /*yield*/, new Consulta_1.default().consultarPorId(config, dao)];
-                    case 3: return [2 /*return*/, _a.sent()];
-                    case 4:
-                        if (!config.paginado) return [3 /*break*/, 6];
-                        return [4 /*yield*/, new Consulta_1.default().consultaPaginada(config, dao)];
-                    case 5: return [2 /*return*/, _a.sent()];
-                    case 6: return [4 /*yield*/, new Consulta_1.default().consultar(config, dao)];
-                    case 7: return [2 /*return*/, _a.sent()];
-                    case 8:
                         error_2 = _a.sent();
                         throw new Error(error_2);
-                    case 9: return [2 /*return*/];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    },
+    modelConsultarPorId: function (config, dao) {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        if (config instanceof Array) {
+                            throw new Error('Consulta por id não pode ser um array.');
+                        }
+                        if (config.porId === undefined) {
+                            throw new Error('Erro na configuração da consulta porId.');
+                        }
+                        return [4 /*yield*/, new Consulta_1.default().consultarPorId(config, dao)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        error_3 = _a.sent();
+                        throw new Error(error_3);
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    },
+    modelConsultarPaginado: function (config, dao) {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        if (config instanceof Array) {
+                            throw new Error('Consulta paginada não pode ser um array.');
+                        }
+                        if (config.paginado === undefined) {
+                            throw new Error('Erro na configuração da consulta paginada.');
+                        }
+                        return [4 /*yield*/, new Consulta_1.default().consultaPaginada(config, dao)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        error_4 = _a.sent();
+                        throw new Error(error_4);
+                    case 3: return [2 /*return*/];
                 }
             });
         });

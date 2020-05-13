@@ -7,6 +7,11 @@ declare const SupremusCore: {
     addModel(model: Model): void;
     getModel(nome: string): Model;
     modelPersiste(config: ConfigPersist, dao?: DAO | undefined): Promise<Record<string, any>>;
-    modelConsultar(config: ItemConsulta | ItemConsulta[], dao?: DAO | undefined): Promise<Record<string, any> | undefined>;
+    modelConsultar(config: ItemConsulta | ItemConsulta[], dao?: DAO | undefined): Promise<Record<string, any> | Record<string, any>[] | undefined>;
+    modelConsultarPorId(config: ItemConsulta | ItemConsulta[], dao?: DAO | undefined): Promise<Record<string, any> | undefined>;
+    modelConsultarPaginado(config: ItemConsulta | ItemConsulta[], dao?: DAO | undefined): Promise<{
+        totalReg: number;
+        data: Record<string, any>[];
+    } | undefined>;
 };
 export default SupremusCore;

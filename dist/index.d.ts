@@ -13,7 +13,12 @@ export declare const SupremusCore: {
     addModel(model: ModelI): void;
     getModel(nome: string): ModelI;
     modelPersiste(config: import("./src/model/ModelPersiste").ConfigPersist, dao?: DAOI | undefined): Promise<Record<string, any>>;
-    modelConsultar(config: import("./src/sql/SqlConsulta").ItemConsulta | import("./src/sql/SqlConsulta").ItemConsulta[], dao?: DAOI | undefined): Promise<Record<string, any> | undefined>;
+    modelConsultar(config: import("./src/sql/SqlConsulta").ItemConsulta | import("./src/sql/SqlConsulta").ItemConsulta[], dao?: DAOI | undefined): Promise<Record<string, any> | Record<string, any>[] | undefined>;
+    modelConsultarPorId(config: import("./src/sql/SqlConsulta").ItemConsulta | import("./src/sql/SqlConsulta").ItemConsulta[], dao?: DAOI | undefined): Promise<Record<string, any> | undefined>;
+    modelConsultarPaginado(config: import("./src/sql/SqlConsulta").ItemConsulta | import("./src/sql/SqlConsulta").ItemConsulta[], dao?: DAOI | undefined): Promise<{
+        totalReg: number;
+        data: Record<string, any>[];
+    } | undefined>;
 };
 export declare const DAO: typeof DAOI;
 export declare const Consulta: typeof ConsultaI;

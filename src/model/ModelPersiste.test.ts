@@ -89,7 +89,7 @@ describe('Teste de persistencia de dados', () => {
   });
 
   it('Editar registro', async () => {
-    let usuario = await SupremusCore.modelConsultar({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } });
+    let usuario = await SupremusCore.modelConsultarPorId({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } });
     usuario!.nome = 'suporte 2';
 
     const config: ConfigPersist = {

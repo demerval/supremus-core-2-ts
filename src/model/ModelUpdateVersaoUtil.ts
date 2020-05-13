@@ -6,7 +6,7 @@ import { Status } from "../enums";
 const ModelUpdateVersaoUtil = {
 
   async getModelVersao(dao: DAO, id: any) {
-    let model = await SupremusCore.modelConsultar({ key: 'uv', tabela: 'updateVersao', porId: { id } }, dao);
+    let model = await SupremusCore.modelConsultarPorId({ key: 'uv', tabela: 'updateVersao', porId: { id } }, dao);
     if (model === undefined) {
       model = { id, versaoUpdate: 0 };
       const config: ConfigPersist = {

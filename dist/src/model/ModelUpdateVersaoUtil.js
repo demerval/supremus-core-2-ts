@@ -47,7 +47,7 @@ var ModelUpdateVersaoUtil = {
             var model, config;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, SupremusCore_1.default.modelConsultar({ key: 'uv', tabela: 'updateVersao', porId: { id: id } }, dao)];
+                    case 0: return [4 /*yield*/, SupremusCore_1.default.modelConsultarPorId({ key: 'uv', tabela: 'updateVersao', porId: { id: id } }, dao)];
                     case 1:
                         model = _a.sent();
                         if (!(model === undefined)) return [3 /*break*/, 3];
