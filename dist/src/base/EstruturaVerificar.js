@@ -155,15 +155,16 @@ var EstruturaVerificar = /** @class */ (function () {
     };
     EstruturaVerificar.prototype._verificarTabelasUpdate = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var configEstruturaVersao, modelUpdateVersao, configUpdateVersao;
+            var modelEstruturaVersao, configEstruturaVersao, modelUpdateVersao, configUpdateVersao;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        configEstruturaVersao = new EstruturaUtil_1.default().prepare(require('../base/models/EstruturaVersaoModel'));
+                        modelEstruturaVersao = require('../base/models/EstruturaVersaoModel').default;
+                        configEstruturaVersao = new EstruturaUtil_1.default().prepare(modelEstruturaVersao);
                         return [4 /*yield*/, this._executarVerificacao(configEstruturaVersao)];
                     case 1:
                         _a.sent();
-                        modelUpdateVersao = require('../base/models/UpdateVersaoModel');
+                        modelUpdateVersao = require('../base/models/UpdateVersaoModel').default;
                         configUpdateVersao = new EstruturaUtil_1.default().prepare(modelUpdateVersao);
                         return [4 /*yield*/, this._executarVerificacao(configUpdateVersao)];
                     case 2:

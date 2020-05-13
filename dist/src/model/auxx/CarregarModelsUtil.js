@@ -81,7 +81,7 @@ var CarregarModelsUtil = /** @class */ (function () {
                     case 4:
                         if (file.indexOf(".js") !== 0) {
                             model = require(dirFile);
-                            ModelManager_1.default.addModel(model);
+                            ModelManager_1.default.addModel(model.default);
                         }
                         _b.label = 5;
                     case 5:

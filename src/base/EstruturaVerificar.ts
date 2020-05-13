@@ -51,10 +51,11 @@ class EstruturaVerificar {
   }
 
   async _verificarTabelasUpdate() {
-    const configEstruturaVersao = new EstruturaUtil().prepare(require('../base/models/EstruturaVersaoModel'));
+    const modelEstruturaVersao = require('../base/models/EstruturaVersaoModel').default;
+    const configEstruturaVersao = new EstruturaUtil().prepare(modelEstruturaVersao);
     await this._executarVerificacao(configEstruturaVersao);
 
-    const modelUpdateVersao = require('../base/models/UpdateVersaoModel');
+    const modelUpdateVersao = require('../base/models/UpdateVersaoModel').default;
     const configUpdateVersao = new EstruturaUtil().prepare(modelUpdateVersao);
     await this._executarVerificacao(configUpdateVersao);
 

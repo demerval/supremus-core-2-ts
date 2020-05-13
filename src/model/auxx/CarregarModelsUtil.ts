@@ -14,7 +14,7 @@ class CarregarModelsUtil {
         await this.verificarPastas(dirFile);
       } else if (file.indexOf(".js") !== 0) {
         let model = require(dirFile);
-        ModelManager.addModel(model);
+        ModelManager.addModel(model.default);
       }
     }
   }
