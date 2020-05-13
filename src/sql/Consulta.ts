@@ -6,7 +6,7 @@ import { FieldType } from "../enums";
 
 class Consulta {
 
-  async consultar(config: ItemConsulta | ItemConsulta[], dao?: DAO) {
+  async consultar(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>[] | Record<string, any>> {
     let openDao = (dao === undefined);
 
     try {

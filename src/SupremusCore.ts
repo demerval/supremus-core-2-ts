@@ -33,7 +33,7 @@ const SupremusCore = {
     }
   },
 
-  async modelConsultar(config: ItemConsulta | ItemConsulta[], dao?: DAO) {
+  async modelConsultar(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>[] | Record<string, any> | { totalReg: number, data: Record<string, any>[] } | undefined> {
     try {
       if (config instanceof Array) {
         return await new Consulta().consultar(config, dao);
