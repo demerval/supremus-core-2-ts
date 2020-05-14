@@ -11,7 +11,7 @@ export declare const SupremusCore: {
     carregarModels(dirModels: string): Promise<boolean>;
     addModel(model: ModelI): void;
     getModel(nome: string): ModelI;
-    modelPersiste(config: import("./src/model/ModelPersiste").ConfigPersist, dao?: DAOI | undefined): Promise<Record<string, any>>;
+    modelPersiste(config: import("supremus-core-2-ts-base/dist/src/persistir").ConfigPersist, dao?: DAOI | undefined): Promise<Record<string, any>>;
     modelConsultar(config: import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta | import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta[], dao?: DAOI | undefined): Promise<Record<string, any>[]>;
     modelConsultarArray(config: import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta | import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta[], dao?: DAOI | undefined): Promise<Record<string, any>>;
     modelConsultarPorId(config: import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta | import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta[], dao?: DAOI | undefined): Promise<Record<string, any> | undefined>;

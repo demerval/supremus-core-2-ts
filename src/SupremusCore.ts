@@ -1,10 +1,10 @@
 import EstruturaVerificar from "./base/EstruturaVerificar";
 import ModelManager from "./model/ModelManager";
 import Model from "./model/Model";
-import ModelPersiste, { ConfigPersist } from "./model/ModelPersiste";
+import ModelPersiste from "./model/ModelPersiste";
 import DAO from "./database/DAO";
 import Consulta from "./sql/Consulta";
-import {Consulta as Base} from "supremus-core-2-ts-base";
+import {Consulta as Base, Persistir} from "supremus-core-2-ts-base";
 import CarregarModelsUtil from "./model/auxx/CarregarModelsUtil";
 
 const SupremusCore = {
@@ -24,7 +24,7 @@ const SupremusCore = {
     return ModelManager.getModel(nome.toLowerCase());
   },
 
-  async modelPersiste(config: ConfigPersist, dao?: DAO) {
+  async modelPersiste(config: Persistir.ConfigPersist, dao?: DAO) {
     try {
       const result = await new ModelPersiste().persistir(config, dao);
       return result;

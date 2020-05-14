@@ -3,27 +3,12 @@ import ModelManager from "./ModelManager";
 import { ModelInsert } from "./auxx/ModelInsert";
 import { ModelUpdate } from "./auxx/ModelUpdate";
 import { ModelDelete } from "./auxx/ModelDelete";
-import { Consulta as Base, Enums } from "supremus-core-2-ts-base";
+import { Consulta as Base, Enums, Persistir } from "supremus-core-2-ts-base";
 import Consulta from "../sql/Consulta";
-
-export interface ConfigPersist {
-  persistir: ItemPersist[];
-  consultar?: ItemPersitConsulta[];
-}
-
-export interface ItemPersist {
-  id: string;
-  status: Enums.Status;
-  dados: any;
-}
-
-export interface ItemPersitConsulta extends Base.ItemConsulta {
-  idConsulta?: { campo: string, campoResult: [string, string] };
-}
 
 class ModelPersiste {
 
-  async persistir(config: ConfigPersist, dao?: DAO) {
+  async persistir(config: Persistir.ConfigPersist, dao?: DAO) {
     let openDao = (dao === undefined);
   
     try {

@@ -1,7 +1,6 @@
 import SqlConsultaUtil from "./SqlConsultaUtil";
 import ModelManager from "../model/ModelManager";
-import { Consulta as Base } from 'supremus-core-2-ts-base';
-import { FieldType } from 'supremus-core-2-ts-base/dist/enums';
+import { Consulta as Base, Enums } from 'supremus-core-2-ts-base';
 class SqlConsulta {
 
   private sqlUtil: SqlConsultaUtil;
@@ -121,7 +120,7 @@ class SqlConsulta {
     return `${campo[0]}.${campoModel.getNome()}`;
   }
 
-  _getCampo(key: string, campos: [string, string, string, string, FieldType][]) {
+  _getCampo(key: string, campos: [string, string, string, string, Enums.FieldType][]) {
     const campo = campos.find(c => c[3] === key);
     if (campo === undefined) {
       throw new Error(`O campo ${key} não foi localizado.`);

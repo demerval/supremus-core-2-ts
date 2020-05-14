@@ -3,8 +3,7 @@ require('dotenv/config');
 import SupremusCore from '../SupremusCore';
 import path from 'path';
 
-import { ConfigPersist } from './ModelPersiste';
-import { Consulta as Base, Enums } from 'supremus-core-2-ts-base';
+import { Consulta as Base, Enums, Persistir } from 'supremus-core-2-ts-base';
 import DAO from '../database/DAO';
 import ModelManager from './ModelManager';
 
@@ -73,7 +72,7 @@ describe('Teste de persistencia de dados', () => {
   });
 
   it('Novo registro', async () => {
-    const config: ConfigPersist = {
+    const config: Persistir.ConfigPersist = {
       persistir: [
         { id: 'usuario', status: Enums.Status.INSERT, dados: { nome: 'suporte', senha: '12345678', ativo: true } },
         { id: 'usuarioPermissao', status: Enums.Status.INSERT, dados: { idUsuario: ['usuario', 'id'], permissao: 'admin' } }
@@ -92,7 +91,7 @@ describe('Teste de persistencia de dados', () => {
     let usuario = await SupremusCore.modelConsultarPorId({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } });
     usuario!.nome = 'suporte 2';
 
-    const config: ConfigPersist = {
+    const config: Persistir.ConfigPersist = {
       persistir: [
         { id: 'usuario', status: Enums.Status.UPDATE, dados: usuario },
       ],
@@ -140,7 +139,7 @@ describe('Teste de persistencia de dados', () => {
   it('Deletar registro', async () => {
     let usuario = await SupremusCore.modelConsultarPorId({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } });
 
-    const config: ConfigPersist = {
+    const config: Persistir.ConfigPersist = {
       persistir: [
         { id: 'usuario', status: Enums.Status.DELETE, dados: usuario },
       ],
