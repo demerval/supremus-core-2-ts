@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var SupremusCore_1 = __importDefault(require("../SupremusCore"));
-var enums_1 = require("../enums");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var ModelUpdateVersaoUtil = {
     getModelVersao: function (dao, id) {
         return __awaiter(this, void 0, void 0, function () {
@@ -53,7 +53,7 @@ var ModelUpdateVersaoUtil = {
                         if (!(model === undefined)) return [3 /*break*/, 3];
                         model = { id: id, versaoUpdate: 0 };
                         config = {
-                            persistir: [{ id: 'updateVersao', status: enums_1.Status.INSERT, dados: model }]
+                            persistir: [{ id: 'updateVersao', status: supremus_core_2_ts_base_1.Enums.Status.INSERT, dados: model }]
                         };
                         return [4 /*yield*/, SupremusCore_1.default.modelPersiste(config, dao)];
                     case 2:
@@ -71,7 +71,7 @@ var ModelUpdateVersaoUtil = {
                 switch (_a.label) {
                     case 0:
                         config = {
-                            persistir: [{ id: 'updateVersao', status: enums_1.Status.UPDATE, dados: model }]
+                            persistir: [{ id: 'updateVersao', status: supremus_core_2_ts_base_1.Enums.Status.UPDATE, dados: model }]
                         };
                         return [4 /*yield*/, SupremusCore_1.default.modelPersiste(config, dao)];
                     case 1:

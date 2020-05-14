@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var enums_1 = require("../../enums");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var Campo = /** @class */ (function () {
     function Campo(nome) {
-        this.tipo = enums_1.FieldType.VARCHAR;
+        this.tipo = supremus_core_2_ts_base_1.Enums.FieldType.VARCHAR;
         this.config = {};
         this.nome = nome.toLowerCase();
     }
@@ -29,7 +29,7 @@ var Campo = /** @class */ (function () {
         }
     };
     Campo.FieldType = function () {
-        return enums_1.FieldType;
+        return supremus_core_2_ts_base_1.Enums.FieldType;
     };
     Campo.prototype.getNome = function () {
         return this.nome;

@@ -1,6 +1,6 @@
 import Campo, { Dados } from '../campos/abstract/Campo';
 import DAO from '../database/DAO';
-import { Status, FieldType } from '../enums';
+import { Enums } from 'supremus-core-2-ts-base';
 declare class Model {
     private nome;
     private nomeTabela;
@@ -17,10 +17,10 @@ declare class Model {
     getVersao(): number;
     getChavePrimaria(): [string, Campo];
     getDados(dados: any): Dados[];
-    getCamposConsulta(key: string, campos?: string[]): [string, string, string, string, FieldType][];
+    getCamposConsulta(key: string, campos?: string[]): [string, string, string, string, Enums.FieldType][];
     onEstruturaVerificada(dao: DAO): Promise<void>;
     onDadosCarregado(item: any): Promise<void>;
-    onAntesPersistir(dao: DAO, item: any, status: Status): Promise<void>;
-    onDepoisPersistir(dao: DAO, item: any, status: Status): Promise<void>;
+    onAntesPersistir(dao: DAO, item: any, status: Enums.Status): Promise<void>;
+    onDepoisPersistir(dao: DAO, item: any, status: Enums.Status): Promise<void>;
 }
 export default Model;

@@ -1,4 +1,4 @@
-import { SqlConsultaConfig, CampoCriterio } from "./SqlConsulta";
+import { Consulta as Base } from "supremus-core-2-ts-base";
 import ModelManager from "../model/ModelManager";
 import Model from "../model/Model";
 
@@ -7,7 +7,7 @@ const ordenadores = ["ASC", "DESC"];
 
 class SqlConsultaUtil {
 
-  getCriterio(configs: Map<string, SqlConsultaConfig>) {
+  getCriterio(configs: Map<string, Base.SqlConsultaConfig>) {
     const criterioConsulta = [];
 
     for (let [key, config] of configs) {
@@ -51,7 +51,7 @@ class SqlConsultaUtil {
     return criterioConsulta.join(" ");
   }
 
-  getDadosCriterio(key: string, model: Model, criterio: CampoCriterio) {
+  getDadosCriterio(key: string, model: Model, criterio: Base.CampoCriterio) {
     const campo = model.getCampo(criterio.campo);
     if (campo === undefined) {
       throw new Error(`O campo ${criterio.campo} não foi localizado.`);
@@ -80,7 +80,7 @@ class SqlConsultaUtil {
     return `${key}.${campo.getNome()} ${operador} ${valores.join(" ")}`;
   }
 
-  getDadosOrdem(configs: Map<string, SqlConsultaConfig>, ordem?: string[]) {
+  getDadosOrdem(configs: Map<string, Base.SqlConsultaConfig>, ordem?: string[]) {
     if (ordem === undefined) {
       return undefined;
     }

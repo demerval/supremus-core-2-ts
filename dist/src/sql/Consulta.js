@@ -187,6 +187,9 @@ var Consulta = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         openDao = (dao === undefined);
+                        if (config.porId === undefined) {
+                            throw new Error('Erro na configuração da consulta porId.');
+                        }
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 9, 10, 11]);
@@ -234,38 +237,59 @@ var Consulta = /** @class */ (function () {
     };
     Consulta.prototype.consultaPaginada = function (config, dao) {
         return __awaiter(this, void 0, void 0, function () {
-            var openDao, totalReg, dados, rows, rowsT, data, error_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var openDao, totalReg, resultFuncoes, dados, rows, rowsT, row, _a, _b, fnc, data, error_4;
+            var e_2, _c, _d;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
                     case 0:
                         openDao = (dao === undefined);
-                        _a.label = 1;
+                        if (config.paginado === undefined) {
+                            throw new Error('Erro na configuração da consulta paginada.');
+                        }
+                        _e.label = 1;
                     case 1:
-                        _a.trys.push([1, 8, 9, 10]);
+                        _e.trys.push([1, 8, 9, 10]);
                         if (!(openDao === true)) return [3 /*break*/, 3];
                         dao = new DAO_1.default();
                         return [4 /*yield*/, dao.openConexao()];
                     case 2:
-                        _a.sent();
-                        _a.label = 3;
+                        _e.sent();
+                        _e.label = 3;
                     case 3:
                         totalReg = 0;
+                        resultFuncoes = [];
                         dados = new SqlConsulta_1.default().getDadosConsulta(config, true);
                         return [4 /*yield*/, dao.executarSql(dados.sql)];
                     case 4:
-                        rows = _a.sent();
+                        rows = _e.sent();
                         if (!(rows.length > 0)) return [3 /*break*/, 6];
                         return [4 /*yield*/, dao.executarSql(dados.sqlTotal)];
                     case 5:
-                        rowsT = _a.sent();
-                        totalReg = parseInt(rowsT[0].TOTAL, 0);
-                        _a.label = 6;
+                        rowsT = _e.sent();
+                        row = rowsT[0];
+                        totalReg = parseInt(row.TOTAL, 0);
+                        if (config.paginado.funcoes) {
+                            try {
+                                for (_a = __values(config.paginado.funcoes), _b = _a.next(); !_b.done; _b = _a.next()) {
+                                    fnc = _b.value;
+                                    resultFuncoes.push((_d = {}, _d[fnc.alias] = row[fnc.alias.toUpperCase()], _d));
+                                }
+                            }
+                            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                            finally {
+                                try {
+                                    if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                                }
+                                finally { if (e_2) throw e_2.error; }
+                            }
+                        }
+                        _e.label = 6;
                     case 6: return [4 /*yield*/, ModelConverter_1.ModelConverter.criarModelConsulta(dados.configs, dados.campos, rows)];
                     case 7:
-                        data = _a.sent();
-                        return [2 /*return*/, { totalReg: totalReg, data: data }];
+                        data = _e.sent();
+                        return [2 /*return*/, { totalReg: totalReg, data: data, resultFuncoes: resultFuncoes }];
                     case 8:
-                        error_4 = _a.sent();
+                        error_4 = _e.sent();
                         throw new Error(error_4);
                     case 9:
                         if (openDao === true) {
@@ -281,8 +305,8 @@ var Consulta = /** @class */ (function () {
     };
     Consulta.prototype._subConsulta = function (dao, campos, subConsultas, rows) {
         return __awaiter(this, void 0, void 0, function () {
-            var subConsultas_1, subConsultas_1_1, cs, rows_1, rows_1_1, row, subConfig, dadosSub, rowsSub, _a, _b, e_2_1, e_3_1;
-            var e_3, _c, e_2, _d;
+            var subConsultas_1, subConsultas_1_1, cs, rows_1, rows_1_1, row, subConfig, dadosSub, rowsSub, _a, _b, e_3_1, e_4_1;
+            var e_4, _c, e_3, _d;
             return __generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
@@ -295,7 +319,7 @@ var Consulta = /** @class */ (function () {
                         _e.label = 2;
                     case 2:
                         _e.trys.push([2, 8, 9, 10]);
-                        rows_1 = (e_2 = void 0, __values(rows)), rows_1_1 = rows_1.next();
+                        rows_1 = (e_3 = void 0, __values(rows)), rows_1_1 = rows_1.next();
                         _e.label = 3;
                     case 3:
                         if (!!rows_1_1.done) return [3 /*break*/, 7];
@@ -316,28 +340,28 @@ var Consulta = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 7: return [3 /*break*/, 10];
                     case 8:
-                        e_2_1 = _e.sent();
-                        e_2 = { error: e_2_1 };
+                        e_3_1 = _e.sent();
+                        e_3 = { error: e_3_1 };
                         return [3 /*break*/, 10];
                     case 9:
                         try {
                             if (rows_1_1 && !rows_1_1.done && (_d = rows_1.return)) _d.call(rows_1);
                         }
-                        finally { if (e_2) throw e_2.error; }
+                        finally { if (e_3) throw e_3.error; }
                         return [7 /*endfinally*/];
                     case 10:
                         subConsultas_1_1 = subConsultas_1.next();
                         return [3 /*break*/, 1];
                     case 11: return [3 /*break*/, 14];
                     case 12:
-                        e_3_1 = _e.sent();
-                        e_3 = { error: e_3_1 };
+                        e_4_1 = _e.sent();
+                        e_4 = { error: e_4_1 };
                         return [3 /*break*/, 14];
                     case 13:
                         try {
                             if (subConsultas_1_1 && !subConsultas_1_1.done && (_c = subConsultas_1.return)) _c.call(subConsultas_1);
                         }
-                        finally { if (e_3) throw e_3.error; }
+                        finally { if (e_4) throw e_4.error; }
                         return [7 /*endfinally*/];
                     case 14: return [2 /*return*/];
                 }

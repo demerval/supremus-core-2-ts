@@ -4,7 +4,7 @@ import Model from "./model/Model";
 import ModelPersiste, { ConfigPersist } from "./model/ModelPersiste";
 import DAO from "./database/DAO";
 import Consulta from "./sql/Consulta";
-import { ItemConsulta } from "./sql/SqlConsulta";
+import {Consulta as Base} from "supremus-core-2-ts-base";
 import CarregarModelsUtil from "./model/auxx/CarregarModelsUtil";
 
 const SupremusCore = {
@@ -33,7 +33,7 @@ const SupremusCore = {
     }
   },
 
-  async modelConsultar(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>[]> {
+  async modelConsultar(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any>[]> {
     try {
       return await new Consulta().consultar(config, dao);
     } catch (error) {
@@ -41,7 +41,7 @@ const SupremusCore = {
     }
   },
 
-  async modelConsultarArray(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>> {
+  async modelConsultarArray(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any>> {
     try {
       return await new Consulta().consultarArray(config, dao);
     } catch (error) {
@@ -49,14 +49,10 @@ const SupremusCore = {
     }
   },
 
-  async modelConsultarPorId(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any> | undefined> {
+  async modelConsultarPorId(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any> | undefined> {
     try {
       if (config instanceof Array) {
         throw new Error('Consulta por id não pode ser um array.');
-      }
-
-      if (config.porId === undefined) {
-        throw new Error('Erro na configuração da consulta porId.');
       }
 
       return await new Consulta().consultarPorId(config, dao);
@@ -65,14 +61,10 @@ const SupremusCore = {
     }
   },
 
-  async modelConsultarPaginado(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<{ totalReg: number, data: Record<string, any>[] }> {
+  async modelConsultarPaginado(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<{ totalReg: number, data: Record<string, any>[], resultFuncoes: Record<string, any>[] }> {
     try {
       if (config instanceof Array) {
         throw new Error('Consulta paginada não pode ser um array.');
-      }
-
-      if (config.paginado === undefined) {
-        throw new Error('Erro na configuração da consulta paginada.');
       }
 
       return await new Consulta().consultaPaginada(config, dao);

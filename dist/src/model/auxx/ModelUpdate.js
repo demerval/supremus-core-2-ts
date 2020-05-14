@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ModelUtil_1 = require("./ModelUtil");
-var enums_1 = require("../../enums");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var ModelConverter_1 = require("./ModelConverter");
 exports.ModelUpdate = {
     persiste: function (dao, model, dados) {
@@ -47,7 +47,7 @@ exports.ModelUpdate = {
                 switch (_a.label) {
                     case 0:
                         nomeTabela = model.getNomeTabela();
-                        return [4 /*yield*/, ModelUtil_1.ModelUtil.validarInsertUpdate(dao, nomeTabela, dados, enums_1.Status.UPDATE)];
+                        return [4 /*yield*/, ModelUtil_1.ModelUtil.validarInsertUpdate(dao, nomeTabela, dados, supremus_core_2_ts_base_1.Enums.Status.UPDATE)];
                     case 1:
                         _a.sent();
                         campos = [];
@@ -66,14 +66,14 @@ exports.ModelUpdate = {
                             throw new Error('Não foi informado o id.');
                         }
                         valores.push(chave[2]);
-                        return [4 /*yield*/, model.onAntesPersistir(dao, dados, enums_1.Status.UPDATE)];
+                        return [4 /*yield*/, model.onAntesPersistir(dao, dados, supremus_core_2_ts_base_1.Enums.Status.UPDATE)];
                     case 2:
                         _a.sent();
                         sql = "UPDATE " + nomeTabela + " SET " + campos.join(', ') + " WHERE " + chave[1] + " = ?;";
                         return [4 /*yield*/, dao.executarSql(sql, valores)];
                     case 3:
                         _a.sent();
-                        return [4 /*yield*/, model.onDepoisPersistir(dao, dados, enums_1.Status.UPDATE)];
+                        return [4 /*yield*/, model.onDepoisPersistir(dao, dados, supremus_core_2_ts_base_1.Enums.Status.UPDATE)];
                     case 4:
                         _a.sent();
                         return [4 /*yield*/, ModelConverter_1.ModelConverter.criarModel(dados)];

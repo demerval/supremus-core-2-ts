@@ -22,6 +22,7 @@
     "js-md5": "^0.7.3",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.25.3",
-    "node-firebird": "^0.8.9"
+    "node-firebird": "^0.8.9",
+    "supremus-core-2-ts-base": "https:\\\\github.com\\demerval\\supremus-core-2-ts-base"
   }
 }

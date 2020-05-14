@@ -1,10 +1,10 @@
 import DAO from "../../database/DAO";
-import { Status } from "../../enums";
+import { Enums } from "supremus-core-2-ts-base";
 import Campo from "../../campos/abstract/Campo";
 
 export const ModelUtil = {
 
-  async validarInsertUpdate(dao: DAO, nomeTabela: string, dados: any, status: Status, campoChave?: [string, Campo]) {
+  async validarInsertUpdate(dao: DAO, nomeTabela: string, dados: any, status: Enums.Status, campoChave?: [string, Campo]) {
     let campos = [];
     let valores = [];
     let chave = null;
@@ -22,12 +22,12 @@ export const ModelUtil = {
       return true;
     }
 
-    if (status === Status.INSERT) {
+    if (status === Enums.Status.INSERT) {
       chave = [0, campoChave![1].getNome()];
     }
 
     let sql = `SELECT ${chave[1]} FROM ${nomeTabela} WHERE (${campos.join(' OR ')})`;
-    if (status === Status.UPDATE) {
+    if (status === Enums.Status.UPDATE) {
       sql += ` AND ${chave[1]} <> ?`;
       valores.push(chave[2]);
     }

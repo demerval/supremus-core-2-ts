@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv/config');
 var SupremusCore_1 = __importDefault(require("../SupremusCore"));
 var path_1 = __importDefault(require("path"));
-var enums_1 = require("../enums");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var DAO_1 = __importDefault(require("../database/DAO"));
 var ModelManager_1 = __importDefault(require("./ModelManager"));
 var idUsuario = 0;
@@ -188,8 +188,8 @@ describe('Teste de persistencia de dados', function () {
                 case 0:
                     config = {
                         persistir: [
-                            { id: 'usuario', status: enums_1.Status.INSERT, dados: { nome: 'suporte', senha: '12345678', ativo: true } },
-                            { id: 'usuarioPermissao', status: enums_1.Status.INSERT, dados: { idUsuario: ['usuario', 'id'], permissao: 'admin' } }
+                            { id: 'usuario', status: supremus_core_2_ts_base_1.Enums.Status.INSERT, dados: { nome: 'suporte', senha: '12345678', ativo: true } },
+                            { id: 'usuarioPermissao', status: supremus_core_2_ts_base_1.Enums.Status.INSERT, dados: { idUsuario: ['usuario', 'id'], permissao: 'admin' } }
                         ]
                     };
                     return [4 /*yield*/, SupremusCore_1.default.modelPersiste(config)];
@@ -213,7 +213,7 @@ describe('Teste de persistencia de dados', function () {
                     usuario.nome = 'suporte 2';
                     config = {
                         persistir: [
-                            { id: 'usuario', status: enums_1.Status.UPDATE, dados: usuario },
+                            { id: 'usuario', status: supremus_core_2_ts_base_1.Enums.Status.UPDATE, dados: usuario },
                         ],
                         consultar: [
                             {
@@ -239,6 +239,33 @@ describe('Teste de persistencia de dados', function () {
             }
         });
     }); });
+    it('Consulta paginada com funcao', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var config, rows;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    config = {
+                        key: 'u',
+                        tabela: 'usuario',
+                        paginado: {
+                            pagina: 0, qtdeRegistros: 10, funcoes: [
+                                { key: 'u', campo: 'id', alias: 'somaId' },
+                                { key: 'up', campo: 'id', alias: 'countIdPermissao', funcao: supremus_core_2_ts_base_1.Enums.FuncoesSql.COUNT }
+                            ]
+                        },
+                        joins: [{
+                                key: 'up',
+                                tabela: 'usuarioPermissao',
+                                joinOn: ['idUsuario', ['u', 'id']],
+                            }]
+                    };
+                    return [4 /*yield*/, SupremusCore_1.default.modelConsultarPaginado(config)];
+                case 1:
+                    rows = _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('Deletar registro', function () { return __awaiter(void 0, void 0, void 0, function () {
         var usuario, config, result;
         return __generator(this, function (_a) {
@@ -248,7 +275,7 @@ describe('Teste de persistencia de dados', function () {
                     usuario = _a.sent();
                     config = {
                         persistir: [
-                            { id: 'usuario', status: enums_1.Status.DELETE, dados: usuario },
+                            { id: 'usuario', status: supremus_core_2_ts_base_1.Enums.Status.DELETE, dados: usuario },
                         ],
                     };
                     return [4 /*yield*/, SupremusCore_1.default.modelPersiste(config)];

@@ -50,12 +50,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var enums_1 = require("../enums");
 var DAO_1 = __importDefault(require("../database/DAO"));
 var ModelManager_1 = __importDefault(require("./ModelManager"));
 var ModelInsert_1 = require("./auxx/ModelInsert");
 var ModelUpdate_1 = require("./auxx/ModelUpdate");
 var ModelDelete_1 = require("./auxx/ModelDelete");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var Consulta_1 = __importDefault(require("../sql/Consulta"));
 var ModelPersiste = /** @class */ (function () {
     function ModelPersiste() {
@@ -107,9 +107,9 @@ var ModelPersiste = /** @class */ (function () {
                         }
                         _c = c.status;
                         switch (_c) {
-                            case enums_1.Status.INSERT: return [3 /*break*/, 6];
-                            case enums_1.Status.UPDATE: return [3 /*break*/, 8];
-                            case enums_1.Status.DELETE: return [3 /*break*/, 10];
+                            case supremus_core_2_ts_base_1.Enums.Status.INSERT: return [3 /*break*/, 6];
+                            case supremus_core_2_ts_base_1.Enums.Status.UPDATE: return [3 /*break*/, 8];
+                            case supremus_core_2_ts_base_1.Enums.Status.DELETE: return [3 /*break*/, 10];
                         }
                         return [3 /*break*/, 12];
                     case 6: return [4 /*yield*/, ModelInsert_1.ModelInsert.persiste(dao, model, dados)];

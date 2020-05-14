@@ -1,8 +1,8 @@
 import Campo, { CampoConfig, Dados } from './abstract/Campo';
-import { FieldType } from '../enums';
+import { Enums } from 'supremus-core-2-ts-base';
 
 interface CampoDateConfig extends CampoConfig {
-  tipo?: FieldType;
+  tipo?: Enums.FieldType;
 }
 
 class CampoNumber extends Campo {

@@ -2,7 +2,7 @@ import DAO from "../../database/DAO";
 import Model from "../Model";
 import Campo, { Dados } from "../../campos/abstract/Campo";
 import { ModelUtil } from "./ModelUtil";
-import { Status } from "../../enums";
+import { Enums } from "supremus-core-2-ts-base";
 import { ModelConverter } from "./ModelConverter";
 
 const replicar = process.env.REPLICAR !== undefined ? Boolean(process.env.REPLICAR) : false;
@@ -14,7 +14,7 @@ export const ModelInsert = {
     const nomeTabela = model.getNomeTabela();
     const campoChave = model.getChavePrimaria();
 
-    await ModelUtil.validarInsertUpdate(dao, nomeTabela, dados, Status.INSERT, campoChave);
+    await ModelUtil.validarInsertUpdate(dao, nomeTabela, dados, Enums.Status.INSERT, campoChave);
 
     if (campoChave[1].getChavePrimaria()?.autoIncremento) {
       const id = await gerarId(dao, nomeTabela, campoChave);
@@ -31,12 +31,12 @@ export const ModelInsert = {
       params.push('?');
     });
 
-    await model.onAntesPersistir(dao, dados, Status.INSERT);
+    await model.onAntesPersistir(dao, dados, Enums.Status.INSERT);
 
     const sql = `INSERT INTO ${nomeTabela} (${campos.join(', ')}) VALUES (${params.join(', ')});`;
     await dao.executarSql(sql, valores);
 
-    await model.onDepoisPersistir(dao, dados, Status.INSERT);
+    await model.onDepoisPersistir(dao, dados, Enums.Status.INSERT);
 
     return await ModelConverter.criarModel(dados);
   },

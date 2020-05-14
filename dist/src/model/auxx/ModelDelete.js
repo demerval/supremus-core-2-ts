@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var enums_1 = require("../../enums");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var ModelConverter_1 = require("./ModelConverter");
 exports.ModelDelete = {
     persiste: function (dao, model, dados) {
@@ -57,14 +57,14 @@ exports.ModelDelete = {
                             throw new Error('Não foi informado o id.');
                         }
                         valores.push(chave[2]);
-                        return [4 /*yield*/, model.onAntesPersistir(dao, dados, enums_1.Status.DELETE)];
+                        return [4 /*yield*/, model.onAntesPersistir(dao, dados, supremus_core_2_ts_base_1.Enums.Status.DELETE)];
                     case 1:
                         _a.sent();
                         sql = "DELETE FROM " + nomeTabela + " WHERE " + chave[1] + " = ?;";
                         return [4 /*yield*/, dao.executarSql(sql, valores)];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, model.onDepoisPersistir(dao, dados, enums_1.Status.DELETE)];
+                        return [4 /*yield*/, model.onDepoisPersistir(dao, dados, supremus_core_2_ts_base_1.Enums.Status.DELETE)];
                     case 3:
                         _a.sent();
                         return [4 /*yield*/, ModelConverter_1.ModelConverter.criarModel(dados)];

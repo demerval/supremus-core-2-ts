@@ -1,4 +1,5 @@
-import { Model, FieldType, CampoNumber, CampoDate, CampoString, CampoBoolean } from '../../../index';
+import { Model, CampoNumber, CampoDate, CampoString, CampoBoolean } from '../../../index';
+import { Enums } from 'supremus-core-2-ts-base'
 
 const campos = new Map();
 campos.set('id', new CampoNumber('codigo', { chavePrimaria: { autoIncremento: true } }));
@@ -24,8 +25,8 @@ campos.set('dataFundacao', new CampoDate('data_nascimento'));
 campos.set('idEmpresa', new CampoNumber('cod_empresa', { obrigatorio: true }));
 campos.set('comissao', new CampoNumber('comissao', { decimal: 2 }));
 campos.set('tipo', new CampoBoolean('tipo'));
-campos.set('idSituacao', new CampoNumber('cod_situacao', { tipo: FieldType.SMALL_INT, obrigatorio: true }));
-campos.set('tipoContribuinte', new CampoNumber('tipo_contribuinte', { tipo: FieldType.SMALL_INT }));
+campos.set('idSituacao', new CampoNumber('cod_situacao', { tipo: Enums.FieldType.SMALL_INT, obrigatorio: true }));
+campos.set('tipoContribuinte', new CampoNumber('tipo_contribuinte', { tipo: Enums.FieldType.SMALL_INT }));
 campos.set('cliente', new CampoBoolean('cliente'));
 campos.set('consumidorFinal', new CampoBoolean('consumidor_final'));
 campos.set('fornecedor', new CampoBoolean('fornecedor'));

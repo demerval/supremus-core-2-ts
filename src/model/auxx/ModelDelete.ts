@@ -1,7 +1,7 @@
 import DAO from "../../database/DAO";
 import Model from "../Model";
 import { Dados } from "../../campos/abstract/Campo";
-import { Status } from "../../enums";
+import { Enums } from "supremus-core-2-ts-base";
 import { ModelConverter } from "./ModelConverter";
 
 export const ModelDelete = {
@@ -23,12 +23,12 @@ export const ModelDelete = {
     }
     valores.push(chave[2]);
 
-    await model.onAntesPersistir(dao, dados, Status.DELETE);
+    await model.onAntesPersistir(dao, dados, Enums.Status.DELETE);
 
     const sql = `DELETE FROM ${nomeTabela} WHERE ${chave[1]} = ?;`;
     await dao.executarSql(sql, valores);
 
-    await model.onDepoisPersistir(dao, dados, Status.DELETE);
+    await model.onDepoisPersistir(dao, dados, Enums.Status.DELETE);
 
     return await ModelConverter.criarModel(dados);
   },

@@ -1,10 +1,10 @@
-import { FieldType, CaseType } from '../../enums';
+import { Enums } from 'supremus-core-2-ts-base';
 import { ChavePrimaria } from '../interfaces/ChavePrimaria';
 import { ChaveEstrangeira } from '../interfaces/ChaveEstrangeira';
 export interface CampoConfig {
     chavePrimaria?: ChavePrimaria;
     chaveEstrangeira?: ChaveEstrangeira;
-    tipoCaracter?: CaseType;
+    tipoCaracter?: Enums.CaseType;
     decimal?: number;
     obrigatorio?: boolean;
     unico?: boolean;
@@ -13,22 +13,22 @@ export interface CampoConfig {
     valorPadrao?: any;
     naoReplicar?: boolean;
 }
-export declare type Dados = [string, string, any, boolean, boolean, FieldType];
+export declare type Dados = [string, string, any, boolean, boolean, Enums.FieldType];
 declare abstract class Campo {
     private nome;
     private tipo;
     private config;
     constructor(nome: string);
-    configure(tipo: FieldType, config?: CampoConfig): void;
-    static FieldType(): typeof FieldType;
+    configure(tipo: Enums.FieldType, config?: CampoConfig): void;
+    static FieldType(): typeof Enums.FieldType;
     getNome(): string;
-    getTipo(): FieldType;
+    getTipo(): Enums.FieldType;
     isChavePrimaria(): boolean;
     getChavePrimaria(): ChavePrimaria | undefined;
     isChaveEstrangeira(): boolean;
     isNaoReplicar(): boolean | undefined;
     getChaveEstrangeira(): ChaveEstrangeira | undefined;
-    getTipoCaracter(): CaseType | undefined;
+    getTipoCaracter(): Enums.CaseType | undefined;
     getDecimal(): number | undefined;
     isObrigatorio(): boolean;
     isUnico(): boolean;

@@ -1,7 +1,7 @@
 import DAO from "../database/DAO";
 import SupremusCore from "../SupremusCore";
 import { ConfigPersist } from "./ModelPersiste";
-import { Status } from "../enums";
+import { Enums } from "supremus-core-2-ts-base";
 
 const ModelUpdateVersaoUtil = {
 
@@ -10,7 +10,7 @@ const ModelUpdateVersaoUtil = {
     if (model === undefined) {
       model = { id, versaoUpdate: 0 };
       const config: ConfigPersist = {
-        persistir: [{ id: 'updateVersao', status: Status.INSERT, dados: model }]
+        persistir: [{ id: 'updateVersao', status: Enums.Status.INSERT, dados: model }]
       };
 
       await SupremusCore.modelPersiste(config, dao);
@@ -21,7 +21,7 @@ const ModelUpdateVersaoUtil = {
 
   async atualizarVersao(dao: DAO, model: any) {
     const config: ConfigPersist = {
-      persistir: [{ id: 'updateVersao', status: Status.UPDATE, dados: model }]
+      persistir: [{ id: 'updateVersao', status: Enums.Status.UPDATE, dados: model }]
     }
 
     await SupremusCore.modelPersiste(config, dao);

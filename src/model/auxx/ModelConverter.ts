@@ -1,8 +1,7 @@
 import { Dados } from "../../campos/abstract/Campo";
-import { FieldType } from "../../enums";
+import { Consulta as Base, Enums } from "supremus-core-2-ts-base";
 import moment from "moment";
 import ModelManager from "../ModelManager";
-import { SqlConsultaConfig } from "../../sql/SqlConsulta";
 
 export const ModelConverter = {
 
@@ -16,7 +15,7 @@ export const ModelConverter = {
     return item;
   },
 
-  async criarModelConsulta(configs: Map<string, SqlConsultaConfig>, dados:  [string, string, string, string, FieldType][], rows: any[]) {
+  async criarModelConsulta(configs: Map<string, Base.SqlConsultaConfig>, dados:  [string, string, string, string, Enums.FieldType][], rows: any[]) {
     const key1: string = configs.keys().next().value;
     const model = ModelManager.getModel(configs.get(key1)!.tabela);
     let itens = [];
@@ -67,8 +66,8 @@ export const ModelConverter = {
 
 }
 
-function getValor(tipo: FieldType, valor: any) {
-  if (tipo === FieldType.DATE) {
+function getValor(tipo: Enums.FieldType, valor: any) {
+  if (tipo === Enums.FieldType.DATE) {
     if (valor === undefined || valor === null) {
       return '';
     } else {
@@ -76,7 +75,7 @@ function getValor(tipo: FieldType, valor: any) {
     }
   }
 
-  if (tipo === FieldType.BOOLEAN) {
+  if (tipo === Enums.FieldType.BOOLEAN) {
     if (valor === undefined || valor === null) {
       return false;
     } else {

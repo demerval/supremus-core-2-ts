@@ -61,7 +61,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var enums_1 = require("../../enums");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var moment_1 = __importDefault(require("moment"));
 var ModelManager_1 = __importDefault(require("../ModelManager"));
 exports.ModelConverter = {
@@ -190,7 +190,7 @@ exports.ModelConverter = {
     }
 };
 function getValor(tipo, valor) {
-    if (tipo === enums_1.FieldType.DATE) {
+    if (tipo === supremus_core_2_ts_base_1.Enums.FieldType.DATE) {
         if (valor === undefined || valor === null) {
             return '';
         }
@@ -198,7 +198,7 @@ function getValor(tipo, valor) {
             return moment_1.default(valor, 'YYYY-MM-DD').format('DD/MM/YYYY');
         }
     }
-    if (tipo === enums_1.FieldType.BOOLEAN) {
+    if (tipo === supremus_core_2_ts_base_1.Enums.FieldType.BOOLEAN) {
         if (valor === undefined || valor === null) {
             return false;
         }

@@ -47,7 +47,7 @@ var __values = (this && this.__values) || function(o) {
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var enums_1 = require("../../enums");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 exports.ModelUtil = {
     validarInsertUpdate: function (dao, nomeTabela, dados, status, campoChave) {
         return __awaiter(this, void 0, void 0, function () {
@@ -81,11 +81,11 @@ exports.ModelUtil = {
                         if (campos.length === 0) {
                             return [2 /*return*/, true];
                         }
-                        if (status === enums_1.Status.INSERT) {
+                        if (status === supremus_core_2_ts_base_1.Enums.Status.INSERT) {
                             chave = [0, campoChave[1].getNome()];
                         }
                         sql = "SELECT " + chave[1] + " FROM " + nomeTabela + " WHERE (" + campos.join(' OR ') + ")";
-                        if (status === enums_1.Status.UPDATE) {
+                        if (status === supremus_core_2_ts_base_1.Enums.Status.UPDATE) {
                             sql += " AND " + chave[1] + " <> ?";
                             valores.push(chave[2]);
                         }

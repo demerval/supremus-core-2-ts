@@ -42,9 +42,10 @@ var SqlConsulta = /** @class */ (function () {
         this.configs = new Map();
     }
     SqlConsulta.prototype.getDadosConsulta = function (config, isPaginado, subConsulta) {
+        var e_1, _a;
         if (isPaginado === void 0) { isPaginado = false; }
-        var _a, _b, _c;
-        var paginado = isPaginado === true ? "FIRST " + ((_a = config.paginado) === null || _a === void 0 ? void 0 : _a.qtdeRegistros) + " SKIP " + ((_b = config.paginado) === null || _b === void 0 ? void 0 : _b.pagina) * ((_c = config.paginado) === null || _c === void 0 ? void 0 : _c.qtdeRegistros) + " " : '';
+        var _b, _c, _d, _e;
+        var paginado = isPaginado === true ? "FIRST " + ((_b = config.paginado) === null || _b === void 0 ? void 0 : _b.qtdeRegistros) + " SKIP " + ((_c = config.paginado) === null || _c === void 0 ? void 0 : _c.pagina) * ((_d = config.paginado) === null || _d === void 0 ? void 0 : _d.qtdeRegistros) + " " : '';
         var dados = this.getDados(config, subConsulta);
         var campos = dados.campos.map(function (c) { return c[0] + "." + c[1] + " AS " + c[2]; });
         var sql = "SELECT " + paginado + campos.join(', ') + " FROM " + dados.tabela;
@@ -61,7 +62,24 @@ var SqlConsulta = /** @class */ (function () {
         if (isPaginado === true) {
             var model = ModelManager_1.default.getModel(config.tabela);
             var campoChave = model.getChavePrimaria();
-            sqlTotal = "SELECT COUNT(" + config.key + "." + campoChave[1].getNome() + ") AS TOTAL FROM " + dados.tabela;
+            var funcoes = ["COUNT(" + config.key + "." + campoChave[1].getNome() + ") AS TOTAL"];
+            if ((_e = config.paginado) === null || _e === void 0 ? void 0 : _e.funcoes) {
+                try {
+                    for (var _f = __values(config.paginado.funcoes), _g = _f.next(); !_g.done; _g = _f.next()) {
+                        var fnc = _g.value;
+                        var campo = this._getCampoModel(fnc.key, fnc.campo);
+                        funcoes.push((fnc.funcao === undefined ? 'SUM' : fnc.funcao) + "(" + fnc.key + "." + campo.getNome() + ") AS " + fnc.alias);
+                    }
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (_g && !_g.done && (_a = _f.return)) _a.call(_f);
+                    }
+                    finally { if (e_1) throw e_1.error; }
+                }
+            }
+            sqlTotal = "SELECT " + funcoes.join(', ') + " FROM " + dados.tabela;
             if (dados.joins) {
                 sqlTotal += " " + dados.joins.join(' ');
             }
@@ -78,7 +96,7 @@ var SqlConsulta = /** @class */ (function () {
         };
     };
     SqlConsulta.prototype.getDados = function (config, subConsulta) {
-        var e_1, _a;
+        var e_2, _a;
         this.configs.set(config.key, { tabela: config.tabela.toLowerCase(), criterios: config.criterios });
         var model = ModelManager_1.default.getModel(config.tabela.toLowerCase());
         var campos = model.getCamposConsulta(config.key, config.campos);
@@ -94,12 +112,12 @@ var SqlConsulta = /** @class */ (function () {
                     campos.push.apply(campos, __spread(dadosJoin.campos));
                 }
             }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
             finally {
                 try {
                     if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                 }
-                finally { if (e_1) throw e_1.error; }
+                finally { if (e_2) throw e_2.error; }
             }
         }
         var criterio = this.sqlUtil.getCriterio(this.configs);
@@ -152,6 +170,21 @@ var SqlConsulta = /** @class */ (function () {
             throw new Error("O campo " + key + " n\u00E3o foi localizado.");
         }
         return subConsulta.row[campo[2].toUpperCase()];
+    };
+    SqlConsulta.prototype._getCampoModel = function (key, nomeCampo) {
+        var config = this.configs.get(key);
+        if (config === undefined) {
+            throw new Error("N\u00E3o foi localizada a tabela pelo key: " + key);
+        }
+        var model = ModelManager_1.default.getModel(config.tabela);
+        if (model === undefined) {
+            throw new Error("N\u00E3o foi localizada a tabela: " + config.tabela);
+        }
+        var campo = model.getCampo(nomeCampo);
+        if (campo === undefined) {
+            throw new Error("N\u00E3o foi localizado o campo: " + nomeCampo + " na tabela: " + config.tabela);
+        }
+        return campo;
     };
     return SqlConsulta;
 }());

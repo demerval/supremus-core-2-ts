@@ -15,8 +15,6 @@ import CampoDateI from './src/campos/CampoDate';
 import CampoNumberI from './src/campos/CampoNumber';
 import CampoStringI from './src/campos/CampoString';
 
-import { Status as StatusI, FieldType as FieldTypeI, CaseType as CaseTypeI } from './src/enums';
-
 import { Auth } from './src/middlewares/Auth';
 import { Crypto } from './src/middlewares/Crypto';
 
@@ -34,10 +32,6 @@ export const CampoBoolean = CampoBooleanI;
 export const CampoDate = CampoDateI;
 export const CampoNumber = CampoNumberI;
 export const CampoString = CampoStringI;
-
-export const Status = StatusI;
-export const FieldType = FieldTypeI;
-export const CaseType = CaseTypeI;
 
 export const AuthMiddleware = Auth;
 export const CryptoMiddleware = Crypto;

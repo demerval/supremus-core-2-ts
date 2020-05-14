@@ -2,7 +2,7 @@ import DAO from "../../database/DAO";
 import Model from "../Model";
 import { Dados } from "../../campos/abstract/Campo";
 import { ModelUtil } from "./ModelUtil";
-import { Status } from "../../enums";
+import { Enums } from "supremus-core-2-ts-base";
 import { ModelConverter } from "./ModelConverter";
 
 export const ModelUpdate = {
@@ -10,7 +10,7 @@ export const ModelUpdate = {
   async persiste(dao: DAO, model: Model, dados: Dados[]) {
     const nomeTabela = model.getNomeTabela();
 
-    await ModelUtil.validarInsertUpdate(dao, nomeTabela, dados, Status.UPDATE);
+    await ModelUtil.validarInsertUpdate(dao, nomeTabela, dados, Enums.Status.UPDATE);
 
     const campos: string[] = [];
     const valores: any[] = [];
@@ -30,12 +30,12 @@ export const ModelUpdate = {
     }
     valores.push(chave[2]);
 
-    await model.onAntesPersistir(dao, dados, Status.UPDATE);
+    await model.onAntesPersistir(dao, dados, Enums.Status.UPDATE);
 
     const sql = `UPDATE ${nomeTabela} SET ${campos.join(', ')} WHERE ${chave[1]} = ?;`;
     await dao.executarSql(sql, valores);
 
-    await model.onDepoisPersistir(dao, dados, Status.UPDATE);
+    await model.onDepoisPersistir(dao, dados, Enums.Status.UPDATE);
 
     return await ModelConverter.criarModel(dados);
   },

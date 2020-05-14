@@ -17,7 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Campo_1 = __importDefault(require("./abstract/Campo"));
-var enums_1 = require("../enums");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var md5 = require('js-md5');
 var CampoString = /** @class */ (function (_super) {
     __extends(CampoString, _super);
@@ -55,9 +55,9 @@ var CampoString = /** @class */ (function (_super) {
             throw new Error("O campo " + key + " tem que ter no m\u00E1ximo " + this.getTamanhoMaximo() + " caracteres.");
         }
         switch (this.getTipoCaracter()) {
-            case enums_1.CaseType.NONE:
+            case supremus_core_2_ts_base_1.Enums.CaseType.NONE:
                 return [key, this.getNome(), this.password === true ? md5.base64(valor) : valor, this.isUnico(), this.isChavePrimaria(), this.getTipo()];
-            case enums_1.CaseType.LOWER:
+            case supremus_core_2_ts_base_1.Enums.CaseType.LOWER:
                 return [key, this.getNome(), this.password === true ? md5.base64(valor.toLowerCase()) : valor.toLowerCase(), this.isUnico(), this.isChavePrimaria(), this.getTipo()];
             default:
                 return [key, this.getNome(), this.password === true ? md5.base64(valor.toUpperCase()) : valor.toUpperCase(), this.isUnico(), this.isChavePrimaria(), this.getTipo()];

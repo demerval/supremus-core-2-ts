@@ -129,9 +129,6 @@ var SupremusCore = {
                         if (config instanceof Array) {
                             throw new Error('Consulta por id não pode ser um array.');
                         }
-                        if (config.porId === undefined) {
-                            throw new Error('Erro na configuração da consulta porId.');
-                        }
                         return [4 /*yield*/, new Consulta_1.default().consultarPorId(config, dao)];
                     case 1: return [2 /*return*/, _a.sent()];
                     case 2:
@@ -151,9 +148,6 @@ var SupremusCore = {
                         _a.trys.push([0, 2, , 3]);
                         if (config instanceof Array) {
                             throw new Error('Consulta paginada não pode ser um array.');
-                        }
-                        if (config.paginado === undefined) {
-                            throw new Error('Erro na configuração da consulta paginada.');
                         }
                         return [4 /*yield*/, new Consulta_1.default().consultaPaginada(config, dao)];
                     case 1: return [2 /*return*/, _a.sent()];

@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ModelUtil_1 = require("./ModelUtil");
-var enums_1 = require("../../enums");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var ModelConverter_1 = require("./ModelConverter");
 var replicar = process.env.REPLICAR !== undefined ? Boolean(process.env.REPLICAR) : false;
 var codReplicar = process.env.REPLICAR_COD !== undefined ? Number(process.env.REPLICAR_COD) : '001';
@@ -51,7 +51,7 @@ exports.ModelInsert = {
                     case 0:
                         nomeTabela = model.getNomeTabela();
                         campoChave = model.getChavePrimaria();
-                        return [4 /*yield*/, ModelUtil_1.ModelUtil.validarInsertUpdate(dao, nomeTabela, dados, enums_1.Status.INSERT, campoChave)];
+                        return [4 /*yield*/, ModelUtil_1.ModelUtil.validarInsertUpdate(dao, nomeTabela, dados, supremus_core_2_ts_base_1.Enums.Status.INSERT, campoChave)];
                     case 1:
                         _b.sent();
                         if (!((_a = campoChave[1].getChavePrimaria()) === null || _a === void 0 ? void 0 : _a.autoIncremento)) return [3 /*break*/, 3];
@@ -69,14 +69,14 @@ exports.ModelInsert = {
                             valores.push(d[2]);
                             params.push('?');
                         });
-                        return [4 /*yield*/, model.onAntesPersistir(dao, dados, enums_1.Status.INSERT)];
+                        return [4 /*yield*/, model.onAntesPersistir(dao, dados, supremus_core_2_ts_base_1.Enums.Status.INSERT)];
                     case 4:
                         _b.sent();
                         sql = "INSERT INTO " + nomeTabela + " (" + campos.join(', ') + ") VALUES (" + params.join(', ') + ");";
                         return [4 /*yield*/, dao.executarSql(sql, valores)];
                     case 5:
                         _b.sent();
-                        return [4 /*yield*/, model.onDepoisPersistir(dao, dados, enums_1.Status.INSERT)];
+                        return [4 /*yield*/, model.onDepoisPersistir(dao, dados, supremus_core_2_ts_base_1.Enums.Status.INSERT)];
                     case 6:
                         _b.sent();
                         return [4 /*yield*/, ModelConverter_1.ModelConverter.criarModel(dados)];

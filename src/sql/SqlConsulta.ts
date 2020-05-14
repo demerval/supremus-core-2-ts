@@ -1,69 +1,18 @@
 import SqlConsultaUtil from "./SqlConsultaUtil";
 import ModelManager from "../model/ModelManager";
-import { FieldType } from "../enums";
-import { Dados } from "../campos/abstract/Campo";
-
-export interface ItemConsulta {
-  key: string;
-  tabela: string;
-  campos?: string[];
-  joins?: ItemJoinConsulta[];
-  criterios?: CampoCriterio[];
-  ordem?: string[];
-  subConsultas?: SubConsulta[];
-  paginado?: { pagina: number, qtdeRegistros: number };
-  porId?: { id: any };
-}
-
-export interface ItemJoinConsulta {
-  key: string;
-  tabela: string;
-  campos?: string[];
-  joinTipo?: 'inner' | 'left' | 'right';
-  joinOn: [string, [string, string]],
-  criterios?: CampoCriterio[];
-}
-
-export interface CampoCriterio {
-  campo: string;
-  valor: any;
-  operador?: string;
-  comparador?: 'and' | 'or';
-}
-
-export interface SubConsulta extends ItemConsulta {
-  link: [string, string];
-}
-
-export interface SqlConsultaConfig {
-  tabela: string;
-  criterios?: CampoCriterio[];
-}
-
-export interface SubConsultaConfig {
-  link: [string, string];
-  campos: [string, string, string, string, FieldType][];
-  row: Record<string, any>;
-}
-
-export interface ConsultaConfig {
-  configs: Map<string, SqlConsultaConfig>;
-  campos: [string, string, string, string, FieldType][];
-  sql: string;
-  sqlTotal?: string;
-}
-
+import { Consulta as Base } from 'supremus-core-2-ts-base';
+import { FieldType } from 'supremus-core-2-ts-base/dist/enums';
 class SqlConsulta {
 
   private sqlUtil: SqlConsultaUtil;
-  private configs: Map<string, SqlConsultaConfig>;
+  private configs: Map<string, Base.SqlConsultaConfig>;
 
   constructor() {
     this.sqlUtil = new SqlConsultaUtil();
     this.configs = new Map();
   }
 
-  getDadosConsulta(config: ItemConsulta, isPaginado = false, subConsulta?: SubConsultaConfig): ConsultaConfig {
+  getDadosConsulta(config: Base.ItemConsulta, isPaginado = false, subConsulta?: Base.SubConsultaConfig): Base.ConsultaConfig {
     let paginado = isPaginado === true ? `FIRST ${config.paginado?.qtdeRegistros} SKIP ${config.paginado?.pagina! * config.paginado?.qtdeRegistros!} ` : '';
     const dados = this.getDados(config, subConsulta);
     const campos = dados.campos.map(c => `${c[0]}.${c[1]} AS ${c[2]}`);
@@ -82,7 +31,15 @@ class SqlConsulta {
     if (isPaginado === true) {
       const model = ModelManager.getModel(config.tabela);
       const campoChave = model.getChavePrimaria();
-      sqlTotal = `SELECT COUNT(${config.key}.${campoChave[1].getNome()}) AS TOTAL FROM ${dados.tabela}`;
+      const funcoes: string[] = [`COUNT(${config.key}.${campoChave[1].getNome()}) AS TOTAL`];
+      if (config.paginado?.funcoes) {
+        for (let fnc of config.paginado.funcoes) {
+          const campo = this._getCampoModel(fnc.key, fnc.campo);
+          funcoes.push(`${fnc.funcao === undefined ? 'SUM' : fnc.funcao}(${fnc.key}.${campo.getNome()}) AS ${fnc.alias}`);
+        }
+      }
+
+      sqlTotal = `SELECT ${funcoes.join(', ')} FROM ${dados.tabela}`;
       if (dados.joins) {
         sqlTotal += ` ${dados.joins.join(' ')}`;
       }
@@ -101,7 +58,7 @@ class SqlConsulta {
     };
   }
 
-  getDados(config: ItemConsulta, subConsulta?: SubConsultaConfig) {
+  getDados(config: Base.ItemConsulta, subConsulta?: Base.SubConsultaConfig) {
     this.configs.set(config.key, { tabela: config.tabela.toLowerCase(), criterios: config.criterios });
 
     const model = ModelManager.getModel(config.tabela.toLowerCase());
@@ -138,7 +95,7 @@ class SqlConsulta {
     };
   }
 
-  getDadosJoin(config: ItemJoinConsulta) {
+  getDadosJoin(config: Base.ItemJoinConsulta) {
     const model = ModelManager.getModel(config.tabela.toLowerCase());
     const campos = model.getCamposConsulta(config.key, config.campos);
     const joinTipo = config.joinTipo || 'inner';
@@ -173,13 +130,32 @@ class SqlConsulta {
     return campo[1];
   }
 
-  _getValor(key: string, subConsulta: SubConsultaConfig) {
+  _getValor(key: string, subConsulta: Base.SubConsultaConfig) {
     const campo = subConsulta.campos.find(d => d[3]);
     if (campo === undefined) {
       throw new Error(`O campo ${key} não foi localizado.`);
     }
 
     return subConsulta.row[campo[2].toUpperCase()];
+  }
+
+  _getCampoModel(key: string, nomeCampo: string) {
+    const config = this.configs.get(key);
+    if (config === undefined) {
+      throw new Error(`Não foi localizada a tabela pelo key: ${key}`);
+    }
+
+    const model = ModelManager.getModel(config.tabela);
+    if (model === undefined) {
+      throw new Error(`Não foi localizada a tabela: ${config.tabela}`);
+    }
+
+    const campo = model.getCampo(nomeCampo);
+    if (campo === undefined) {
+      throw new Error(`Não foi localizado o campo: ${nomeCampo} na tabela: ${config.tabela}`);
+    }
+
+    return campo;
   }
 
 }

@@ -4,7 +4,7 @@ import SupremusCore from '../SupremusCore';
 import path from 'path';
 
 import { ConfigPersist } from './ModelPersiste';
-import { Status } from '../enums';
+import { Consulta as Base, Enums } from 'supremus-core-2-ts-base';
 import DAO from '../database/DAO';
 import ModelManager from './ModelManager';
 
@@ -75,8 +75,8 @@ describe('Teste de persistencia de dados', () => {
   it('Novo registro', async () => {
     const config: ConfigPersist = {
       persistir: [
-        { id: 'usuario', status: Status.INSERT, dados: { nome: 'suporte', senha: '12345678', ativo: true } },
-        { id: 'usuarioPermissao', status: Status.INSERT, dados: { idUsuario: ['usuario', 'id'], permissao: 'admin' } }
+        { id: 'usuario', status: Enums.Status.INSERT, dados: { nome: 'suporte', senha: '12345678', ativo: true } },
+        { id: 'usuarioPermissao', status: Enums.Status.INSERT, dados: { idUsuario: ['usuario', 'id'], permissao: 'admin' } }
       ]
     };
 
@@ -94,7 +94,7 @@ describe('Teste de persistencia de dados', () => {
 
     const config: ConfigPersist = {
       persistir: [
-        { id: 'usuario', status: Status.UPDATE, dados: usuario },
+        { id: 'usuario', status: Enums.Status.UPDATE, dados: usuario },
       ],
       consultar: [
         {
@@ -117,12 +117,32 @@ describe('Teste de persistencia de dados', () => {
     expect(Object.keys(result.u[0])).toEqual(['id', 'nome', 'senha', 'ativo', 'up']);
   });
 
+  it('Consulta paginada com funcao', async () => {
+    const config: Base.ItemConsulta = {
+      key: 'u',
+      tabela: 'usuario',
+      paginado: {
+        pagina: 0, qtdeRegistros: 10, funcoes: [
+          { key: 'u', campo: 'id', alias: 'somaId' }, 
+          { key: 'up', campo: 'id', alias: 'countIdPermissao', funcao: Enums.FuncoesSql.COUNT }
+        ]
+      },
+      joins: [{
+        key: 'up',
+        tabela: 'usuarioPermissao',
+        joinOn: ['idUsuario', ['u', 'id']],
+      }]
+    };
+
+    const rows = await SupremusCore.modelConsultarPaginado(config);
+  });
+
   it('Deletar registro', async () => {
     let usuario = await SupremusCore.modelConsultarPorId({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } });
 
     const config: ConfigPersist = {
       persistir: [
-        { id: 'usuario', status: Status.DELETE, dados: usuario },
+        { id: 'usuario', status: Enums.Status.DELETE, dados: usuario },
       ],
     };
 

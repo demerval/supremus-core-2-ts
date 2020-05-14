@@ -50,10 +50,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("../../index");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var campos = new Map();
 campos.set('id', new index_1.CampoNumber('codigo', { chavePrimaria: { autoIncremento: true } }));
 campos.set('nome', new index_1.CampoString('nome', { obrigatorio: true, unico: true, tamanhoMaximo: 30 }));
-campos.set('senha', new index_1.CampoString('senha', { tipoCaracter: index_1.CaseType.NONE, password: true }));
+campos.set('senha', new index_1.CampoString('senha', { tipoCaracter: supremus_core_2_ts_base_1.Enums.CaseType.NONE, password: true }));
 campos.set('ativo', new index_1.CampoBoolean('ativo'));
 var UsuarioModel = /** @class */ (function (_super) {
     __extends(UsuarioModel, _super);

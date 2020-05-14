@@ -1,11 +1,11 @@
-import { FieldType, CaseType } from '../../enums';
+import { Enums } from 'supremus-core-2-ts-base';
 import { ChavePrimaria } from '../interfaces/ChavePrimaria';
 import { ChaveEstrangeira } from '../interfaces/ChaveEstrangeira';
 
 export interface CampoConfig {
   chavePrimaria?: ChavePrimaria;
   chaveEstrangeira?: ChaveEstrangeira;
-  tipoCaracter?: CaseType;
+  tipoCaracter?: Enums.CaseType;
   decimal?: number;
   obrigatorio?: boolean;
   unico?: boolean;
@@ -15,19 +15,19 @@ export interface CampoConfig {
   naoReplicar?: boolean;
 }
 
-export type Dados = [string, string, any, boolean, boolean, FieldType];
+export type Dados = [string, string, any, boolean, boolean, Enums.FieldType];
 
 abstract class Campo {
 
   private nome: string;
-  private tipo: FieldType = FieldType.VARCHAR;
+  private tipo: Enums.FieldType = Enums.FieldType.VARCHAR;
   private config: CampoConfig = {};
 
   constructor(nome: string) {
     this.nome = nome.toLowerCase();
   }
 
-  configure(tipo: FieldType, config?: CampoConfig) {
+  configure(tipo: Enums.FieldType, config?: CampoConfig) {
     this.tipo = tipo;
     if (config) {
       this.config = config;
@@ -51,7 +51,7 @@ abstract class Campo {
   }
 
   static FieldType() {
-    return FieldType;
+    return Enums.FieldType;
   }
 
   getNome() {

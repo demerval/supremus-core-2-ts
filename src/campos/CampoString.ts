@@ -1,5 +1,5 @@
 import Campo, { CampoConfig, Dados } from './abstract/Campo';
-import { CaseType } from '../enums';
+import { Enums } from 'supremus-core-2-ts-base';
 const md5 = require('js-md5');
 
 interface CampoStringConfig extends CampoConfig {
@@ -53,9 +53,9 @@ class CampoString extends Campo {
     }
 
     switch (this.getTipoCaracter()) {
-      case CaseType.NONE:
+      case Enums.CaseType.NONE:
         return [key, this.getNome(), this.password === true ? md5.base64(valor) : valor, this.isUnico(), this.isChavePrimaria(), this.getTipo()];
-      case CaseType.LOWER:
+      case Enums.CaseType.LOWER:
         return [key, this.getNome(), this.password === true ? md5.base64(valor.toLowerCase()) : valor.toLowerCase(), this.isUnico(), this.isChavePrimaria(), this.getTipo()];
       default:
         return [key, this.getNome(), this.password === true ? md5.base64(valor.toUpperCase()) : valor.toUpperCase(), this.isUnico(), this.isChavePrimaria(), this.getTipo()];

@@ -1,10 +1,9 @@
-import { Status } from "../enums";
 import DAO from "../database/DAO";
 import ModelManager from "./ModelManager";
 import { ModelInsert } from "./auxx/ModelInsert";
 import { ModelUpdate } from "./auxx/ModelUpdate";
 import { ModelDelete } from "./auxx/ModelDelete";
-import { ItemConsulta } from "../sql/SqlConsulta";
+import { Consulta as Base, Enums } from "supremus-core-2-ts-base";
 import Consulta from "../sql/Consulta";
 
 export interface ConfigPersist {
@@ -14,11 +13,11 @@ export interface ConfigPersist {
 
 export interface ItemPersist {
   id: string;
-  status: Status;
+  status: Enums.Status;
   dados: any;
 }
 
-export interface ItemPersitConsulta extends ItemConsulta {
+export interface ItemPersitConsulta extends Base.ItemConsulta {
   idConsulta?: { campo: string, campoResult: [string, string] };
 }
 
@@ -47,15 +46,15 @@ class ModelPersiste {
         }
 
         switch (c.status) {
-          case Status.INSERT:
+          case Enums.Status.INSERT:
             const itemInsert = await ModelInsert.persiste(dao!, model, dados);
             result[c.id] = itemInsert;
             break;
-          case Status.UPDATE:
+          case Enums.Status.UPDATE:
             const itemUpdate = await ModelUpdate.persiste(dao!, model, dados);
             result[c.id] = itemUpdate;
             break;
-          case Status.DELETE:
+          case Enums.Status.DELETE:
             const itemDelete = await ModelDelete.persiste(dao!, model, dados);
             result[c.id] = itemDelete;
             break;

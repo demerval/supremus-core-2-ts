@@ -1,6 +1,6 @@
 import Campo, { Dados } from '../campos/abstract/Campo';
 import DAO from '../database/DAO';
-import { Status, FieldType } from '../enums';
+import { Enums } from 'supremus-core-2-ts-base';
 
 class Model {
 
@@ -19,7 +19,7 @@ class Model {
   }
 
   addCampo(nome: string, campo: Campo) {
-    this.campos.set(this.nome, campo);
+    this.campos.set(nome, campo);
   }
 
   isVerificar() {
@@ -70,8 +70,8 @@ class Model {
     return config;
   }
 
-  getCamposConsulta(key: string, campos?: string[]): [string, string, string, string, FieldType][] {
-    const camposConsulta: [string, string, string, string, FieldType][] = [];
+  getCamposConsulta(key: string, campos?: string[]): [string, string, string, string, Enums.FieldType][] {
+    const camposConsulta: [string, string, string, string, Enums.FieldType][] = [];
 
     if (campos === undefined) {
       for (const [k, c] of this.campos) {
@@ -95,9 +95,9 @@ class Model {
 
   async onDadosCarregado(item: any) { }
 
-  async onAntesPersistir(dao: DAO, item: any, status: Status) { }
+  async onAntesPersistir(dao: DAO, item: any, status: Enums.Status) { }
 
-  async onDepoisPersistir(dao: DAO, item: any, status: Status) { }
+  async onDepoisPersistir(dao: DAO, item: any, status: Enums.Status) { }
 
 }
 

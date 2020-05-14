@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("../../../index");
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var campos = new Map();
 campos.set('id', new index_1.CampoNumber('codigo', { chavePrimaria: { autoIncremento: true } }));
 campos.set('dataCadastro', new index_1.CampoDate('dataCadastro', { obrigatorio: true }));
@@ -25,8 +26,8 @@ campos.set('dataFundacao', new index_1.CampoDate('data_nascimento'));
 campos.set('idEmpresa', new index_1.CampoNumber('cod_empresa', { obrigatorio: true }));
 campos.set('comissao', new index_1.CampoNumber('comissao', { decimal: 2 }));
 campos.set('tipo', new index_1.CampoBoolean('tipo'));
-campos.set('idSituacao', new index_1.CampoNumber('cod_situacao', { tipo: index_1.FieldType.SMALL_INT, obrigatorio: true }));
-campos.set('tipoContribuinte', new index_1.CampoNumber('tipo_contribuinte', { tipo: index_1.FieldType.SMALL_INT }));
+campos.set('idSituacao', new index_1.CampoNumber('cod_situacao', { tipo: supremus_core_2_ts_base_1.Enums.FieldType.SMALL_INT, obrigatorio: true }));
+campos.set('tipoContribuinte', new index_1.CampoNumber('tipo_contribuinte', { tipo: supremus_core_2_ts_base_1.Enums.FieldType.SMALL_INT }));
 campos.set('cliente', new index_1.CampoBoolean('cliente'));
 campos.set('consumidorFinal', new index_1.CampoBoolean('consumidor_final'));
 campos.set('fornecedor', new index_1.CampoBoolean('fornecedor'));

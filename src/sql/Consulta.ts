@@ -1,12 +1,12 @@
 import DAO from "../database/DAO";
-import SqlConsulta, { ItemConsulta, SubConsultaConfig, SubConsulta } from "./SqlConsulta";
+import SqlConsulta from "./SqlConsulta";
 import { ModelConverter } from "../model/auxx/ModelConverter";
 import ModelManager from "../model/ModelManager";
-import { FieldType } from "../enums";
+import { Consulta as Base, Enums } from "supremus-core-2-ts-base";
 
 class Consulta {
 
-  async consultar(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>[]> {
+  async consultar(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any>[]> {
     let openDao = (dao === undefined);
 
     try {
@@ -38,7 +38,7 @@ class Consulta {
     }
   }
 
-  async consultarArray(config: ItemConsulta | ItemConsulta[], dao?: DAO): Promise<Record<string, any>> {
+  async consultarArray(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any>> {
     let openDao = (dao === undefined);
 
     try {
@@ -76,8 +76,12 @@ class Consulta {
     }
   }
 
-  async consultarPorId(config: ItemConsulta, dao?: DAO): Promise<Record<string, any> | undefined> {
+  async consultarPorId(config: Base.ItemConsulta, dao?: DAO): Promise<Record<string, any> | undefined> {
     let openDao = (dao === undefined);
+
+    if (config.porId === undefined) {
+      throw new Error('Erro na configuração da consulta porId.');
+    }
 
     try {
       if (openDao === true) {
@@ -115,8 +119,12 @@ class Consulta {
     }
   }
 
-  async consultaPaginada(config: ItemConsulta, dao?: DAO): Promise<{ totalReg: number, data: Record<string, any>[] }> {
+  async consultaPaginada(config: Base.ItemConsulta, dao?: DAO): Promise<{ totalReg: number, data: Record<string, any>[], resultFuncoes: Record<string, any>[] }> {
     let openDao = (dao === undefined);
+
+    if (config.paginado === undefined) {
+      throw new Error('Erro na configuração da consulta paginada.');
+    }
 
     try {
       if (openDao === true) {
@@ -125,15 +133,22 @@ class Consulta {
       }
 
       let totalReg = 0;
+      const resultFuncoes: Record<string, any>[] = [];
       const dados = new SqlConsulta().getDadosConsulta(config, true);
       const rows = await dao!.executarSql(dados.sql);
       if (rows.length > 0) {
         let rowsT = await dao!.executarSql(dados.sqlTotal!);
-        totalReg = parseInt(rowsT[0].TOTAL, 0);
+        const row = rowsT[0];
+        totalReg = parseInt(row.TOTAL, 0);
+        if (config.paginado.funcoes) {
+          for (let fnc of config.paginado.funcoes) {
+            resultFuncoes.push({ [fnc.alias]: row[fnc.alias.toUpperCase()] });
+          }
+        }
       }
 
       const data = await ModelConverter.criarModelConsulta(dados.configs, dados.campos, rows);
-      return { totalReg, data };
+      return { totalReg, data, resultFuncoes };
     } catch (error) {
       throw new Error(error);
     } finally {
@@ -145,10 +160,10 @@ class Consulta {
     }
   }
 
-  async _subConsulta(dao: DAO, campos: [string, string, string, string, FieldType][], subConsultas: SubConsulta[], rows: any[]) {
+  async _subConsulta(dao: DAO, campos: [string, string, string, string, Enums.FieldType][], subConsultas: Base.SubConsulta[], rows: any[]) {
     for (let cs of subConsultas) {
       for (let row of rows) {
-        const subConfig: SubConsultaConfig = { link: cs.link, campos, row }
+        const subConfig: Base.SubConsultaConfig = { link: cs.link, campos, row }
 
         const dadosSub = new SqlConsulta().getDadosConsulta(cs, false, subConfig);
         const rowsSub = await dao.executarSql(dadosSub.sql);
