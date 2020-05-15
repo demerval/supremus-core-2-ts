@@ -185,7 +185,7 @@ var SqlConsulta = /** @class */ (function () {
         if (campo === undefined) {
             throw new Error("O campo " + key + " n\u00E3o foi localizado.");
         }
-        return subConsulta.row[campo.nomeCampo.toUpperCase()];
+        return subConsulta.row[campo.alias.toUpperCase()];
     };
     SqlConsulta.prototype._getCampoModel = function (key, nomeCampo) {
         var config = this.configs.get(key);

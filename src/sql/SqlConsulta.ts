@@ -153,8 +153,8 @@ class SqlConsulta {
     if (campo === undefined) {
       throw new Error(`O campo ${key} não foi localizado.`);
     }
-
-    return subConsulta.row[campo.nomeCampo.toUpperCase()];
+    
+    return subConsulta.row[campo.alias.toUpperCase()];
   }
 
   _getCampoModel(key: string, nomeCampo: string) {

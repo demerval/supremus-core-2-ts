@@ -143,9 +143,21 @@ describe('Teste de persistencia de dados', () => {
       joins: [{
         key: 'up',
         tabela: 'usuarioPermissao',
-        campos: ['permissao', { key: 'up', campo: 'id', alias: 'countId', funcao: Enums.FuncoesSql.COUNT }],
+        campos: ['permissao', { campo: 'id', alias: 'countId', funcao: Enums.FuncoesSql.COUNT }],
         joinOn: ['idUsuario', ['u', 'id']],
       }]
+    };
+
+    const rows = await SupremusCore.modelConsultar(config);
+  });
+
+  it('Consulta com subconsulta', async () => {
+    const config: Base.ItemConsulta = {
+      key: 'u',
+      tabela: 'usuario',
+      subConsultas: [
+        { key: 'up', tabela: 'usuarioPermissao', link: ['idUsuario', 'id'] },
+      ]
     };
 
     const rows = await SupremusCore.modelConsultar(config);

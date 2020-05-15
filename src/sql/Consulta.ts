@@ -163,7 +163,7 @@ class Consulta {
     for (let cs of subConsultas) {
       for (let row of rows) {
         const subConfig: Base.SubConsultaConfig = { link: cs.link, campos, row }
-
+        
         const dadosSub = new SqlConsulta().getDadosConsulta(cs, false, subConfig);
         const rowsSub = await dao.executarSql(dadosSub.sql);
 
