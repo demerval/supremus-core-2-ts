@@ -15,35 +15,39 @@ export const ModelConverter = {
     return item;
   },
 
-  async criarModelConsulta(configs: Map<string, Base.SqlConsultaConfig>, dados:  [string, string, string, string, Enums.FieldType][], rows: any[]) {
+  async criarModelConsulta(configs: Map<string, Base.SqlConsultaConfig>, dados: Base.CampoConsulta[], rows: any[]) {
     const key1: string = configs.keys().next().value;
     const model = ModelManager.getModel(configs.get(key1)!.tabela);
     let itens = [];
 
     const map: Record<string, any> = {};
     for (let d of dados) {
-      const d2 = d[2].toUpperCase();
+      const d2 = d.alias.toUpperCase();
 
-      if (d[0] !== key1) {
-        if (map[d[0]]) {
-          map[d[0]] = { ...map[d[0]], [d2]: { nome: d[3], tipo: d[4] } };
+      if (d.funcao !== undefined) {
+        map[d2] = { nome: d.alias, tipo: d.tipo, funcao: true };
+      } if (d.keyTabela !== key1) {
+        if (map[d.keyTabela]) {
+          map[d.keyTabela] = { ...map[d.keyTabela], [d2]: { nome: d.keyCampo, tipo: d.tipo, funcao: false } };
         } else {
-          map[d[0]] = { [d2]: { nome: d[3], tipo: d[4] } };
+          map[d.keyTabela] = { [d2]: { nome: d.keyCampo, tipo: d.tipo, funcao: false } };
         }
       } else {
-        map[d2] = { nome: d[3], tipo: d[4] };
+        map[d2] = { nome: d.keyCampo, tipo: d.tipo, funcao: false };
       }
     }
 
     for (let r of rows) {
       let item: Record<string, any> = {};
-
+     
       Object.getOwnPropertyNames(r).forEach(name => {
         const s = name.split('_');
         const s0 = s[0].toLowerCase();
         let valor = r[name];
 
-        if (s0 === key1) {
+        if (map[name] !== undefined && map[name].funcao === true) {
+          item[map[name].nome] = getValor(map[name].tipo, valor);
+        } else if (s0 === key1) {
           item[map[name].nome] = getValor(map[name].tipo, valor);
         } else {
           if (map[s0] === undefined) {

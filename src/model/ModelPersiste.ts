@@ -10,7 +10,7 @@ class ModelPersiste {
 
   async persistir(config: Persistir.ConfigPersist, dao?: DAO) {
     let openDao = (dao === undefined);
-  
+
     try {
       if (openDao === true) {
         dao = new DAO();

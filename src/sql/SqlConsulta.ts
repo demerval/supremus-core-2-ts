@@ -1,6 +1,6 @@
 import SqlConsultaUtil from "./SqlConsultaUtil";
 import ModelManager from "../model/ModelManager";
-import { Consulta as Base, Enums } from 'supremus-core-2-ts-base';
+import { Consulta as Base } from 'supremus-core-2-ts-base';
 class SqlConsulta {
 
   private sqlUtil: SqlConsultaUtil;
@@ -14,13 +14,29 @@ class SqlConsulta {
   getDadosConsulta(config: Base.ItemConsulta, isPaginado = false, subConsulta?: Base.SubConsultaConfig): Base.ConsultaConfig {
     let paginado = isPaginado === true ? `FIRST ${config.paginado?.qtdeRegistros} SKIP ${config.paginado?.pagina! * config.paginado?.qtdeRegistros!} ` : '';
     const dados = this.getDados(config, subConsulta);
-    const campos = dados.campos.map(c => `${c[0]}.${c[1]} AS ${c[2]}`);
+    const agrupar = dados.dadosCampos.agrupar;
+    const camposAgrupar: string[] = [];
+
+    const campos = dados.dadosCampos.campos.map(c => {
+      if (agrupar === true) {
+        if (c.funcao !== undefined) {
+          return `${c.funcao}(${c.keyTabela}.${c.nomeCampo}) AS ${c.alias}`;
+        }
+        camposAgrupar.push(`${c.keyTabela}.${c.nomeCampo}`);
+      }
+
+      return `${c.keyTabela}.${c.nomeCampo} AS ${c.alias}`;
+    });
+
     let sql = `SELECT ${paginado}${campos.join(', ')} FROM ${dados.tabela}`;
     if (dados.joins) {
       sql += ` ${dados.joins.join(' ')}`;
     }
     if (dados.criterio) {
       sql += ` WHERE ${dados.criterio}`;
+    }
+    if (agrupar === true && camposAgrupar.length > 0) {
+      sql += ` GROUP BY ${camposAgrupar.join(', ')}`;
     }
     if (dados.ordem) {
       sql += ` ORDER BY ${dados.ordem}`;
@@ -48,10 +64,10 @@ class SqlConsulta {
 
       sqlTotal = sqlTotal.toUpperCase();
     }
-
+   
     return {
       configs: this.configs,
-      campos: dados.campos,
+      campos: dados.dadosCampos.campos,
       sql: sql.toUpperCase(),
       sqlTotal,
     };
@@ -61,7 +77,7 @@ class SqlConsulta {
     this.configs.set(config.key, { tabela: config.tabela.toLowerCase(), criterios: config.criterios });
 
     const model = ModelManager.getModel(config.tabela.toLowerCase());
-    const campos = model.getCamposConsulta(config.key, config.campos);
+    const dadosCampos = model.getCamposConsulta(config.key, config.campos);
 
     let joins = undefined;
     if (config.joins) {
@@ -71,7 +87,10 @@ class SqlConsulta {
 
         const dadosJoin = this.getDadosJoin(join);
         joins.push(dadosJoin.join);
-        campos.push(...dadosJoin.campos);
+        dadosCampos.campos.push(...dadosJoin.dadosCampos.campos);
+        if (dadosCampos.agrupar === false && dadosJoin.dadosCampos.agrupar === true) {
+          dadosCampos.agrupar = true;
+        }
       }
     }
 
@@ -80,14 +99,14 @@ class SqlConsulta {
       if (criterio === undefined) {
         criterio = '';
       }
-      criterio += `${config.key}.${this._getCampo(subConsulta.link[0], campos)} = ${this._getValor(subConsulta.link[1], subConsulta)}`;
+      criterio += `${config.key}.${this._getCampo(subConsulta.link[0], dadosCampos.campos)} = ${this._getValor(subConsulta.link[1], subConsulta)}`;
     }
 
     const ordem = this.sqlUtil.getDadosOrdem(this.configs, config.ordem);
 
     return {
       tabela: `${model.getNomeTabela()} AS ${config.key}`,
-      campos,
+      dadosCampos,
       joins,
       criterio,
       ordem
@@ -96,14 +115,14 @@ class SqlConsulta {
 
   getDadosJoin(config: Base.ItemJoinConsulta) {
     const model = ModelManager.getModel(config.tabela.toLowerCase());
-    const campos = model.getCamposConsulta(config.key, config.campos);
+    const dadosCampos = model.getCamposConsulta(config.key, config.campos);
     const joinTipo = config.joinTipo || 'inner';
     const campo1 = `${config.key}.${model.getCampo(config.joinOn[0])!.getNome()}`;
     const campo2 = this._getCampoJoin(config.joinOn[1]);
 
     return {
       join: `${joinTipo} join ${model.getNomeTabela()} AS ${config.key} on ${campo1} = ${campo2}`,
-      campos,
+      dadosCampos,
     };
   }
 
@@ -120,22 +139,22 @@ class SqlConsulta {
     return `${campo[0]}.${campoModel.getNome()}`;
   }
 
-  _getCampo(key: string, campos: [string, string, string, string, Enums.FieldType][]) {
-    const campo = campos.find(c => c[3] === key);
+  _getCampo(key: string, campos: Base.CampoConsulta[]) {
+    const campo = campos.find(c => c.keyCampo === key);
     if (campo === undefined) {
       throw new Error(`O campo ${key} não foi localizado.`);
     }
 
-    return campo[1];
+    return campo.nomeCampo;
   }
 
   _getValor(key: string, subConsulta: Base.SubConsultaConfig) {
-    const campo = subConsulta.campos.find(d => d[3]);
+    const campo = subConsulta.campos.find(d => d.keyCampo === key);
     if (campo === undefined) {
       throw new Error(`O campo ${key} não foi localizado.`);
     }
 
-    return subConsulta.row[campo[2].toUpperCase()];
+    return subConsulta.row[campo.nomeCampo.toUpperCase()];
   }
 
   _getCampoModel(key: string, nomeCampo: string) {

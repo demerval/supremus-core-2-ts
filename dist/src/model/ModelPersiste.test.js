@@ -266,6 +266,28 @@ describe('Teste de persistencia de dados', function () {
             }
         });
     }); });
+    it('Consulta agrupada', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var config, rows;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    config = {
+                        key: 'u',
+                        tabela: 'usuario',
+                        joins: [{
+                                key: 'up',
+                                tabela: 'usuarioPermissao',
+                                campos: ['permissao', { key: 'up', campo: 'id', alias: 'countId', funcao: supremus_core_2_ts_base_1.Enums.FuncoesSql.COUNT }],
+                                joinOn: ['idUsuario', ['u', 'id']],
+                            }]
+                    };
+                    return [4 /*yield*/, SupremusCore_1.default.modelConsultar(config)];
+                case 1:
+                    rows = _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('Deletar registro', function () { return __awaiter(void 0, void 0, void 0, function () {
         var usuario, config, result;
         return __generator(this, function (_a) {

@@ -63,6 +63,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var Model = /** @class */ (function () {
     function Model(nome, nomeTabela, campos, versao, verificar) {
         if (versao === void 0) { versao = 1; }
@@ -128,11 +129,18 @@ var Model = /** @class */ (function () {
     Model.prototype.getCamposConsulta = function (key, campos) {
         var e_2, _a, e_3, _b;
         var camposConsulta = [];
+        var agrupar = false;
         if (campos === undefined) {
             try {
                 for (var _c = __values(this.campos), _d = _c.next(); !_d.done; _d = _c.next()) {
                     var _e = __read(_d.value, 2), k = _e[0], c = _e[1];
-                    camposConsulta.push([key, c.getNome(), key + "_" + c.getNome(), k, c.getTipo()]);
+                    camposConsulta.push({
+                        keyTabela: key,
+                        nomeCampo: c.getNome(),
+                        alias: key + "_" + c.getNome(),
+                        keyCampo: k,
+                        tipo: c.getTipo()
+                    });
                 }
             }
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
@@ -147,11 +155,35 @@ var Model = /** @class */ (function () {
             try {
                 for (var campos_1 = __values(campos), campos_1_1 = campos_1.next(); !campos_1_1.done; campos_1_1 = campos_1.next()) {
                     var c = campos_1_1.value;
-                    var campo = this.getCampo(c);
-                    if (campo === undefined) {
-                        throw new Error("O campo " + c + " n\u00E3o foi localizado.");
+                    if (typeof c === 'string') {
+                        var campo = this.getCampo(c);
+                        if (campo === undefined) {
+                            throw new Error("O campo " + c + " n\u00E3o foi localizado.");
+                        }
+                        camposConsulta.push({
+                            keyTabela: key,
+                            nomeCampo: campo.getNome(),
+                            alias: key + "_" + campo.getNome(),
+                            keyCampo: c,
+                            tipo: campo.getTipo()
+                        });
                     }
-                    camposConsulta.push([key, campo.getNome(), key + "_" + campo.getNome(), c, campo.getTipo()]);
+                    else {
+                        agrupar = true;
+                        var cFunc = c;
+                        var campo = this.getCampo(cFunc.campo);
+                        if (campo === undefined) {
+                            throw new Error("O campo " + cFunc.campo + " n\u00E3o foi localizado.");
+                        }
+                        camposConsulta.push({
+                            keyTabela: key,
+                            nomeCampo: campo.getNome(),
+                            alias: cFunc.alias,
+                            keyCampo: cFunc.campo,
+                            tipo: campo.getTipo(),
+                            funcao: cFunc.funcao === undefined ? supremus_core_2_ts_base_1.Enums.FuncoesSql.SUM : cFunc.funcao
+                        });
+                    }
                 }
             }
             catch (e_3_1) { e_3 = { error: e_3_1 }; }
@@ -162,7 +194,7 @@ var Model = /** @class */ (function () {
                 finally { if (e_3) throw e_3.error; }
             }
         }
-        return camposConsulta;
+        return { agrupar: agrupar, campos: camposConsulta };
     };
     Model.prototype.onEstruturaVerificada = function (dao) {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {

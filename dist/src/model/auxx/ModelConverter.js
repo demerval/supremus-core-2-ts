@@ -102,17 +102,20 @@ exports.ModelConverter = {
                         try {
                             for (dados_2 = __values(dados), dados_2_1 = dados_2.next(); !dados_2_1.done; dados_2_1 = dados_2.next()) {
                                 d = dados_2_1.value;
-                                d2 = d[2].toUpperCase();
-                                if (d[0] !== key1) {
-                                    if (map[d[0]]) {
-                                        map[d[0]] = __assign(__assign({}, map[d[0]]), (_b = {}, _b[d2] = { nome: d[3], tipo: d[4] }, _b));
+                                d2 = d.alias.toUpperCase();
+                                if (d.funcao !== undefined) {
+                                    map[d2] = { nome: d.alias, tipo: d.tipo, funcao: true };
+                                }
+                                if (d.keyTabela !== key1) {
+                                    if (map[d.keyTabela]) {
+                                        map[d.keyTabela] = __assign(__assign({}, map[d.keyTabela]), (_b = {}, _b[d2] = { nome: d.keyCampo, tipo: d.tipo, funcao: false }, _b));
                                     }
                                     else {
-                                        map[d[0]] = (_c = {}, _c[d2] = { nome: d[3], tipo: d[4] }, _c);
+                                        map[d.keyTabela] = (_c = {}, _c[d2] = { nome: d.keyCampo, tipo: d.tipo, funcao: false }, _c);
                                     }
                                 }
                                 else {
-                                    map[d2] = { nome: d[3], tipo: d[4] };
+                                    map[d2] = { nome: d.keyCampo, tipo: d.tipo, funcao: false };
                                 }
                             }
                         }
@@ -134,7 +137,10 @@ exports.ModelConverter = {
                                             var s = name.split('_');
                                             var s0 = s[0].toLowerCase();
                                             var valor = r[name];
-                                            if (s0 === key1) {
+                                            if (map[name] !== undefined && map[name].funcao === true) {
+                                                item[map[name].nome] = getValor(map[name].tipo, valor);
+                                            }
+                                            else if (s0 === key1) {
                                                 item[map[name].nome] = getValor(map[name].tipo, valor);
                                             }
                                             else {

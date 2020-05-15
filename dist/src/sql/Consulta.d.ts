@@ -1,5 +1,5 @@
 import DAO from "../database/DAO";
-import { Consulta as Base, Enums } from "supremus-core-2-ts-base";
+import { Consulta as Base } from "supremus-core-2-ts-base";
 declare class Consulta {
     consultar(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any>[]>;
     consultarArray(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any>>;
@@ -9,6 +9,6 @@ declare class Consulta {
         data: Record<string, any>[];
         resultFuncoes: Record<string, any>[];
     }>;
-    _subConsulta(dao: DAO, campos: [string, string, string, string, Enums.FieldType][], subConsultas: Base.SubConsulta[], rows: any[]): Promise<void>;
+    _subConsulta(dao: DAO, campos: Base.CampoConsulta[], subConsultas: Base.SubConsulta[], rows: any[]): Promise<void>;
 }
 export default Consulta;

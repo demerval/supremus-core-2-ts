@@ -1,6 +1,6 @@
 import Campo, { Dados } from '../campos/abstract/Campo';
 import DAO from '../database/DAO';
-import { Enums } from 'supremus-core-2-ts-base';
+import { Consulta as Base, Enums } from 'supremus-core-2-ts-base';
 declare class Model {
     private nome;
     private nomeTabela;
@@ -17,7 +17,10 @@ declare class Model {
     getVersao(): number;
     getChavePrimaria(): [string, Campo];
     getDados(dados: any): Dados[];
-    getCamposConsulta(key: string, campos?: string[]): [string, string, string, string, Enums.FieldType][];
+    getCamposConsulta(key: string, campos?: (string | Base.CampoFuncao)[]): {
+        agrupar: boolean;
+        campos: Base.CampoConsulta[];
+    };
     onEstruturaVerificada(dao: DAO): Promise<void>;
     onDadosCarregado(item: any): Promise<void>;
     onAntesPersistir(dao: DAO, item: any, status: Enums.Status): Promise<void>;

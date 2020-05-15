@@ -1,6 +1,6 @@
 import Campo, { Dados } from '../campos/abstract/Campo';
 import DAO from '../database/DAO';
-import { Enums } from 'supremus-core-2-ts-base';
+import { Consulta as Base, Enums } from 'supremus-core-2-ts-base';
 
 class Model {
 
@@ -70,25 +70,54 @@ class Model {
     return config;
   }
 
-  getCamposConsulta(key: string, campos?: string[]): [string, string, string, string, Enums.FieldType][] {
-    const camposConsulta: [string, string, string, string, Enums.FieldType][] = [];
+  getCamposConsulta(key: string, campos?: (string | Base.CampoFuncao)[]): { agrupar: boolean, campos: Base.CampoConsulta[] } {
+    const camposConsulta: Base.CampoConsulta[] = [];
+    let agrupar = false;
 
     if (campos === undefined) {
       for (const [k, c] of this.campos) {
-        camposConsulta.push([key, c.getNome(), `${key}_${c.getNome()}`, k, c.getTipo()]);
+        camposConsulta.push({
+          keyTabela: key,
+          nomeCampo: c.getNome(),
+          alias: `${key}_${c.getNome()}`,
+          keyCampo: k,
+          tipo: c.getTipo()
+        });
       }
     } else {
       for (const c of campos) {
-        const campo = this.getCampo(c);
-        if (campo === undefined) {
-          throw new Error(`O campo ${c} não foi localizado.`);
+        if (typeof c === 'string') {
+          const campo = this.getCampo(c as string);
+          if (campo === undefined) {
+            throw new Error(`O campo ${c} não foi localizado.`);
+          }
+          camposConsulta.push({
+            keyTabela: key,
+            nomeCampo: campo.getNome(),
+            alias: `${key}_${campo.getNome()}`,
+            keyCampo: c as string,
+            tipo: campo.getTipo()
+          });
+        } else {
+          agrupar = true;
+          const cFunc = (c as Base.CampoFuncao);
+          const campo = this.getCampo(cFunc.campo);
+          if (campo === undefined) {
+            throw new Error(`O campo ${cFunc.campo} não foi localizado.`);
+          }
+          camposConsulta.push({
+            keyTabela: key,
+            nomeCampo: campo.getNome(),
+            alias: cFunc.alias,
+            keyCampo: cFunc.campo,
+            tipo: campo.getTipo(),
+            funcao: cFunc.funcao === undefined ? Enums.FuncoesSql.SUM : cFunc.funcao
+          });
         }
-
-        camposConsulta.push([key, campo.getNome(), `${key}_${campo.getNome()}`, c, campo.getTipo()]);
       }
     }
 
-    return camposConsulta;
+    return { agrupar, campos: camposConsulta };
   }
 
   async onEstruturaVerificada(dao: DAO) { };

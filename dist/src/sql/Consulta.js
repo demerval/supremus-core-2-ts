@@ -202,7 +202,6 @@ var Consulta = /** @class */ (function () {
                     case 3:
                         model = ModelManager_1.default.getModel(config.tabela);
                         chaveCampo = model.getChavePrimaria();
-                        config.key = 'a';
                         config.criterios = [{ campo: chaveCampo[0], valor: (_a = config.porId) === null || _a === void 0 ? void 0 : _a.id }];
                         dados = new SqlConsulta_1.default().getDadosConsulta(config);
                         return [4 /*yield*/, dao.executarSql(dados.sql)];

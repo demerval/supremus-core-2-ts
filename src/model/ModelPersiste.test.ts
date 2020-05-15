@@ -122,7 +122,7 @@ describe('Teste de persistencia de dados', () => {
       tabela: 'usuario',
       paginado: {
         pagina: 0, qtdeRegistros: 10, funcoes: [
-          { key: 'u', campo: 'id', alias: 'somaId' }, 
+          { key: 'u', campo: 'id', alias: 'somaId' },
           { key: 'up', campo: 'id', alias: 'countIdPermissao', funcao: Enums.FuncoesSql.COUNT }
         ]
       },
@@ -134,6 +134,21 @@ describe('Teste de persistencia de dados', () => {
     };
 
     const rows = await SupremusCore.modelConsultarPaginado(config);
+  });
+
+  it('Consulta agrupada', async () => {
+    const config: Base.ItemConsulta = {
+      key: 'u',
+      tabela: 'usuario',
+      joins: [{
+        key: 'up',
+        tabela: 'usuarioPermissao',
+        campos: ['permissao', { key: 'up', campo: 'id', alias: 'countId', funcao: Enums.FuncoesSql.COUNT }],
+        joinOn: ['idUsuario', ['u', 'id']],
+      }]
+    };
+
+    const rows = await SupremusCore.modelConsultar(config);
   });
 
   it('Deletar registro', async () => {

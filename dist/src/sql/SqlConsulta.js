@@ -47,13 +47,26 @@ var SqlConsulta = /** @class */ (function () {
         var _b, _c, _d, _e;
         var paginado = isPaginado === true ? "FIRST " + ((_b = config.paginado) === null || _b === void 0 ? void 0 : _b.qtdeRegistros) + " SKIP " + ((_c = config.paginado) === null || _c === void 0 ? void 0 : _c.pagina) * ((_d = config.paginado) === null || _d === void 0 ? void 0 : _d.qtdeRegistros) + " " : '';
         var dados = this.getDados(config, subConsulta);
-        var campos = dados.campos.map(function (c) { return c[0] + "." + c[1] + " AS " + c[2]; });
+        var agrupar = dados.dadosCampos.agrupar;
+        var camposAgrupar = [];
+        var campos = dados.dadosCampos.campos.map(function (c) {
+            if (agrupar === true) {
+                if (c.funcao !== undefined) {
+                    return c.funcao + "(" + c.keyTabela + "." + c.nomeCampo + ") AS " + c.alias;
+                }
+                camposAgrupar.push(c.keyTabela + "." + c.nomeCampo);
+            }
+            return c.keyTabela + "." + c.nomeCampo + " AS " + c.alias;
+        });
         var sql = "SELECT " + paginado + campos.join(', ') + " FROM " + dados.tabela;
         if (dados.joins) {
             sql += " " + dados.joins.join(' ');
         }
         if (dados.criterio) {
             sql += " WHERE " + dados.criterio;
+        }
+        if (agrupar === true && camposAgrupar.length > 0) {
+            sql += " GROUP BY " + camposAgrupar.join(', ');
         }
         if (dados.ordem) {
             sql += " ORDER BY " + dados.ordem;
@@ -90,32 +103,35 @@ var SqlConsulta = /** @class */ (function () {
         }
         return {
             configs: this.configs,
-            campos: dados.campos,
+            campos: dados.dadosCampos.campos,
             sql: sql.toUpperCase(),
             sqlTotal: sqlTotal,
         };
     };
     SqlConsulta.prototype.getDados = function (config, subConsulta) {
-        var e_2, _a;
+        var e_2, _a, _b;
         this.configs.set(config.key, { tabela: config.tabela.toLowerCase(), criterios: config.criterios });
         var model = ModelManager_1.default.getModel(config.tabela.toLowerCase());
-        var campos = model.getCamposConsulta(config.key, config.campos);
+        var dadosCampos = model.getCamposConsulta(config.key, config.campos);
         var joins = undefined;
         if (config.joins) {
             joins = [];
             try {
-                for (var _b = __values(config.joins), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var join = _c.value;
+                for (var _c = __values(config.joins), _d = _c.next(); !_d.done; _d = _c.next()) {
+                    var join = _d.value;
                     this.configs.set(join.key, { tabela: join.tabela.toLowerCase(), criterios: join.criterios });
                     var dadosJoin = this.getDadosJoin(join);
                     joins.push(dadosJoin.join);
-                    campos.push.apply(campos, __spread(dadosJoin.campos));
+                    (_b = dadosCampos.campos).push.apply(_b, __spread(dadosJoin.dadosCampos.campos));
+                    if (dadosCampos.agrupar === false && dadosJoin.dadosCampos.agrupar === true) {
+                        dadosCampos.agrupar = true;
+                    }
                 }
             }
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                    if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
                 }
                 finally { if (e_2) throw e_2.error; }
             }
@@ -125,12 +141,12 @@ var SqlConsulta = /** @class */ (function () {
             if (criterio === undefined) {
                 criterio = '';
             }
-            criterio += config.key + "." + this._getCampo(subConsulta.link[0], campos) + " = " + this._getValor(subConsulta.link[1], subConsulta);
+            criterio += config.key + "." + this._getCampo(subConsulta.link[0], dadosCampos.campos) + " = " + this._getValor(subConsulta.link[1], subConsulta);
         }
         var ordem = this.sqlUtil.getDadosOrdem(this.configs, config.ordem);
         return {
             tabela: model.getNomeTabela() + " AS " + config.key,
-            campos: campos,
+            dadosCampos: dadosCampos,
             joins: joins,
             criterio: criterio,
             ordem: ordem
@@ -138,13 +154,13 @@ var SqlConsulta = /** @class */ (function () {
     };
     SqlConsulta.prototype.getDadosJoin = function (config) {
         var model = ModelManager_1.default.getModel(config.tabela.toLowerCase());
-        var campos = model.getCamposConsulta(config.key, config.campos);
+        var dadosCampos = model.getCamposConsulta(config.key, config.campos);
         var joinTipo = config.joinTipo || 'inner';
         var campo1 = config.key + "." + model.getCampo(config.joinOn[0]).getNome();
         var campo2 = this._getCampoJoin(config.joinOn[1]);
         return {
             join: joinTipo + " join " + model.getNomeTabela() + " AS " + config.key + " on " + campo1 + " = " + campo2,
-            campos: campos,
+            dadosCampos: dadosCampos,
         };
     };
     SqlConsulta.prototype._getCampoJoin = function (campo) {
@@ -158,18 +174,18 @@ var SqlConsulta = /** @class */ (function () {
         return campo[0] + "." + campoModel.getNome();
     };
     SqlConsulta.prototype._getCampo = function (key, campos) {
-        var campo = campos.find(function (c) { return c[3] === key; });
+        var campo = campos.find(function (c) { return c.keyCampo === key; });
         if (campo === undefined) {
             throw new Error("O campo " + key + " n\u00E3o foi localizado.");
         }
-        return campo[1];
+        return campo.nomeCampo;
     };
     SqlConsulta.prototype._getValor = function (key, subConsulta) {
-        var campo = subConsulta.campos.find(function (d) { return d[3]; });
+        var campo = subConsulta.campos.find(function (d) { return d.keyCampo === key; });
         if (campo === undefined) {
             throw new Error("O campo " + key + " n\u00E3o foi localizado.");
         }
-        return subConsulta.row[campo[2].toUpperCase()];
+        return subConsulta.row[campo.nomeCampo.toUpperCase()];
     };
     SqlConsulta.prototype._getCampoModel = function (key, nomeCampo) {
         var config = this.configs.get(key);

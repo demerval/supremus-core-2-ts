@@ -2,7 +2,7 @@ import DAO from "../database/DAO";
 import SqlConsulta from "./SqlConsulta";
 import { ModelConverter } from "../model/auxx/ModelConverter";
 import ModelManager from "../model/ModelManager";
-import { Consulta as Base, Enums } from "supremus-core-2-ts-base";
+import { Consulta as Base } from "supremus-core-2-ts-base";
 
 class Consulta {
 
@@ -92,7 +92,6 @@ class Consulta {
       const model = ModelManager.getModel(config.tabela);
       const chaveCampo = model.getChavePrimaria();
 
-      config.key = 'a';
       config.criterios = [{ campo: chaveCampo[0], valor: config.porId?.id }];
 
       const dados = new SqlConsulta().getDadosConsulta(config);
@@ -160,7 +159,7 @@ class Consulta {
     }
   }
 
-  async _subConsulta(dao: DAO, campos: [string, string, string, string, Enums.FieldType][], subConsultas: Base.SubConsulta[], rows: any[]) {
+  async _subConsulta(dao: DAO, campos: Base.CampoConsulta[], subConsultas: Base.SubConsulta[], rows: any[]) {
     for (let cs of subConsultas) {
       for (let row of rows) {
         const subConfig: Base.SubConsultaConfig = { link: cs.link, campos, row }
