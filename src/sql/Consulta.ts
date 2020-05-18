@@ -159,11 +159,46 @@ class Consulta {
     }
   }
 
+  async consultarSql(config: Base.ConsultaSql | Base.ConsultaSql[], dao?: DAO): Promise<Record<string, any>> {
+    let openDao = (dao === undefined);
+
+    try {
+      if (openDao === true) {
+        dao = new DAO();
+        await dao.openConexao();
+      }
+
+      let result: Record<string, any> = {};
+
+      if (config instanceof Array) {
+        for (let c of config) {
+          const rows = await dao?.executarSql(c.sql);
+          result[c.key] = ModelConverter.criarModelConsultaSql(rows!);
+        }
+
+        return result;
+      } else {
+        const rows = await dao?.executarSql(config.sql);
+        result[config.key] = ModelConverter.criarModelConsultaSql(rows!);
+      }
+
+      return result;
+    } catch (error) {
+      throw new Error(error);
+    } finally {
+      if (openDao === true) {
+        if (dao!.isConexaoOpen()) {
+          dao!.closeConexao();
+        }
+      }
+    }
+  }
+
   async _subConsulta(dao: DAO, campos: Base.CampoConsulta[], subConsultas: Base.SubConsulta[], rows: any[]) {
     for (let cs of subConsultas) {
       for (let row of rows) {
         const subConfig: Base.SubConsultaConfig = { link: cs.link, campos, row }
-        
+
         const dadosSub = new SqlConsulta().getDadosConsulta(cs, false, subConfig);
         const rowsSub = await dao.executarSql(dadosSub.sql);
 

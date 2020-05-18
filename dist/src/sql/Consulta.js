@@ -302,10 +302,79 @@ var Consulta = /** @class */ (function () {
             });
         });
     };
+    Consulta.prototype.consultarSql = function (config, dao) {
+        return __awaiter(this, void 0, void 0, function () {
+            var openDao, result, config_2, config_2_1, c, rows, e_3_1, rows, error_5;
+            var e_3, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        openDao = (dao === undefined);
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 15, 16, 17]);
+                        if (!(openDao === true)) return [3 /*break*/, 3];
+                        dao = new DAO_1.default();
+                        return [4 /*yield*/, dao.openConexao()];
+                    case 2:
+                        _b.sent();
+                        _b.label = 3;
+                    case 3:
+                        result = {};
+                        if (!(config instanceof Array)) return [3 /*break*/, 12];
+                        _b.label = 4;
+                    case 4:
+                        _b.trys.push([4, 9, 10, 11]);
+                        config_2 = __values(config), config_2_1 = config_2.next();
+                        _b.label = 5;
+                    case 5:
+                        if (!!config_2_1.done) return [3 /*break*/, 8];
+                        c = config_2_1.value;
+                        return [4 /*yield*/, (dao === null || dao === void 0 ? void 0 : dao.executarSql(c.sql))];
+                    case 6:
+                        rows = _b.sent();
+                        result[c.key] = ModelConverter_1.ModelConverter.criarModelConsultaSql(rows);
+                        _b.label = 7;
+                    case 7:
+                        config_2_1 = config_2.next();
+                        return [3 /*break*/, 5];
+                    case 8: return [3 /*break*/, 11];
+                    case 9:
+                        e_3_1 = _b.sent();
+                        e_3 = { error: e_3_1 };
+                        return [3 /*break*/, 11];
+                    case 10:
+                        try {
+                            if (config_2_1 && !config_2_1.done && (_a = config_2.return)) _a.call(config_2);
+                        }
+                        finally { if (e_3) throw e_3.error; }
+                        return [7 /*endfinally*/];
+                    case 11: return [2 /*return*/, result];
+                    case 12: return [4 /*yield*/, (dao === null || dao === void 0 ? void 0 : dao.executarSql(config.sql))];
+                    case 13:
+                        rows = _b.sent();
+                        result[config.key] = ModelConverter_1.ModelConverter.criarModelConsultaSql(rows);
+                        _b.label = 14;
+                    case 14: return [2 /*return*/, result];
+                    case 15:
+                        error_5 = _b.sent();
+                        throw new Error(error_5);
+                    case 16:
+                        if (openDao === true) {
+                            if (dao.isConexaoOpen()) {
+                                dao.closeConexao();
+                            }
+                        }
+                        return [7 /*endfinally*/];
+                    case 17: return [2 /*return*/];
+                }
+            });
+        });
+    };
     Consulta.prototype._subConsulta = function (dao, campos, subConsultas, rows) {
         return __awaiter(this, void 0, void 0, function () {
-            var subConsultas_1, subConsultas_1_1, cs, rows_1, rows_1_1, row, subConfig, dadosSub, rowsSub, _a, _b, e_3_1, e_4_1;
-            var e_4, _c, e_3, _d;
+            var subConsultas_1, subConsultas_1_1, cs, rows_1, rows_1_1, row, subConfig, dadosSub, rowsSub, _a, _b, e_4_1, e_5_1;
+            var e_5, _c, e_4, _d;
             return __generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
@@ -318,7 +387,7 @@ var Consulta = /** @class */ (function () {
                         _e.label = 2;
                     case 2:
                         _e.trys.push([2, 8, 9, 10]);
-                        rows_1 = (e_3 = void 0, __values(rows)), rows_1_1 = rows_1.next();
+                        rows_1 = (e_4 = void 0, __values(rows)), rows_1_1 = rows_1.next();
                         _e.label = 3;
                     case 3:
                         if (!!rows_1_1.done) return [3 /*break*/, 7];
@@ -339,28 +408,28 @@ var Consulta = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 7: return [3 /*break*/, 10];
                     case 8:
-                        e_3_1 = _e.sent();
-                        e_3 = { error: e_3_1 };
+                        e_4_1 = _e.sent();
+                        e_4 = { error: e_4_1 };
                         return [3 /*break*/, 10];
                     case 9:
                         try {
                             if (rows_1_1 && !rows_1_1.done && (_d = rows_1.return)) _d.call(rows_1);
                         }
-                        finally { if (e_3) throw e_3.error; }
+                        finally { if (e_4) throw e_4.error; }
                         return [7 /*endfinally*/];
                     case 10:
                         subConsultas_1_1 = subConsultas_1.next();
                         return [3 /*break*/, 1];
                     case 11: return [3 /*break*/, 14];
                     case 12:
-                        e_4_1 = _e.sent();
-                        e_4 = { error: e_4_1 };
+                        e_5_1 = _e.sent();
+                        e_5 = { error: e_5_1 };
                         return [3 /*break*/, 14];
                     case 13:
                         try {
                             if (subConsultas_1_1 && !subConsultas_1_1.done && (_c = subConsultas_1.return)) _c.call(subConsultas_1);
                         }
-                        finally { if (e_4) throw e_4.error; }
+                        finally { if (e_5) throw e_5.error; }
                         return [7 /*endfinally*/];
                     case 14: return [2 /*return*/];
                 }

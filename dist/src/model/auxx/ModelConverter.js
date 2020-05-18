@@ -193,7 +193,41 @@ exports.ModelConverter = {
                 }
             });
         });
-    }
+    },
+    criarModelConsultaSql: function (rows) {
+        var e_4, _a;
+        if (rows.length === 0) {
+            return [];
+        }
+        var itens = [];
+        var map = new Map();
+        var _loop_2 = function (row) {
+            var item = {};
+            Object.getOwnPropertyNames(row).forEach(function (name) {
+                var n = map.get(name);
+                if (n === undefined) {
+                    n = nomeSaida(name);
+                    map.set(name, n);
+                }
+                item[n] = row[name];
+            });
+            itens.push(item);
+        };
+        try {
+            for (var rows_2 = __values(rows), rows_2_1 = rows_2.next(); !rows_2_1.done; rows_2_1 = rows_2.next()) {
+                var row = rows_2_1.value;
+                _loop_2(row);
+            }
+        }
+        catch (e_4_1) { e_4 = { error: e_4_1 }; }
+        finally {
+            try {
+                if (rows_2_1 && !rows_2_1.done && (_a = rows_2.return)) _a.call(rows_2);
+            }
+            finally { if (e_4) throw e_4.error; }
+        }
+        return itens;
+    },
 };
 function getValor(tipo, valor) {
     if (tipo === supremus_core_2_ts_base_1.Enums.FieldType.DATE) {
@@ -214,4 +248,15 @@ function getValor(tipo, valor) {
         }
     }
     return valor;
+}
+function nomeSaida(nome) {
+    return nome
+        .split('_')
+        .map(function (word, index) {
+        if (index === 0) {
+            return word.toLowerCase();
+        }
+        return word[0].toUpperCase() + word.slice(1).toLowerCase();
+    })
+        .join('');
 }

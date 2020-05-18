@@ -39,7 +39,7 @@ export const ModelConverter = {
 
     for (let r of rows) {
       let item: Record<string, any> = {};
-     
+
       Object.getOwnPropertyNames(r).forEach(name => {
         const s = name.split('_');
         const s0 = s[0].toLowerCase();
@@ -66,7 +66,34 @@ export const ModelConverter = {
     }
 
     return itens;
-  }
+  },
+
+  criarModelConsultaSql(rows: any[]) {
+    if (rows.length === 0) {
+      return [];
+    }
+
+    const itens: any[] = [];
+    const map: Map<string, string> = new Map();
+
+    for (let row of rows) {
+      let item: any = {};
+
+      Object.getOwnPropertyNames(row).forEach(name => {
+        let n = map.get(name);
+        if (n === undefined) {
+          n = nomeSaida(name);
+          map.set(name, n);
+        }
+
+        item[n] = row[name];
+      });
+
+      itens.push(item);
+    }
+
+    return itens;
+  },
 
 }
 
@@ -89,4 +116,16 @@ function getValor(tipo: Enums.FieldType, valor: any) {
   }
 
   return valor;
+}
+
+function nomeSaida(nome: string): string {
+  return nome
+    .split('_')
+    .map((word: string, index: number) => {
+      if (index === 0) {
+        return word.toLowerCase();
+      }
+      return word[0].toUpperCase() + word.slice(1).toLowerCase()
+    })
+    .join('');
 }

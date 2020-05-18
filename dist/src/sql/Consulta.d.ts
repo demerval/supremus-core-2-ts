@@ -9,6 +9,7 @@ declare class Consulta {
         data: Record<string, any>[];
         resultFuncoes: Record<string, any>[];
     }>;
+    consultarSql(config: Base.ConsultaSql | Base.ConsultaSql[], dao?: DAO): Promise<Record<string, any>>;
     _subConsulta(dao: DAO, campos: Base.CampoConsulta[], subConsultas: Base.SubConsulta[], rows: any[]): Promise<void>;
 }
 export default Consulta;

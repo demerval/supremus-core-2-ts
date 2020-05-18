@@ -4,7 +4,7 @@ import Model from "./model/Model";
 import ModelPersiste from "./model/ModelPersiste";
 import DAO from "./database/DAO";
 import Consulta from "./sql/Consulta";
-import {Consulta as Base, Persistir} from "supremus-core-2-ts-base";
+import { Consulta as Base, Persistir } from "supremus-core-2-ts-base";
 import CarregarModelsUtil from "./model/auxx/CarregarModelsUtil";
 
 const SupremusCore = {
@@ -56,6 +56,14 @@ const SupremusCore = {
       }
 
       return await new Consulta().consultarPorId(config, dao);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  async modelConsultarSql(config: Base.ConsultaSql | Base.ConsultaSql[], dao?: DAO): Promise<Record<string, any>> {
+    try {
+      return await new Consulta().consultarSql(config, dao);
     } catch (error) {
       throw new Error(error);
     }

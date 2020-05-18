@@ -9,6 +9,7 @@ declare const SupremusCore: {
     modelConsultar(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO | undefined): Promise<Record<string, any>[]>;
     modelConsultarArray(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO | undefined): Promise<Record<string, any>>;
     modelConsultarPorId(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO | undefined): Promise<Record<string, any> | undefined>;
+    modelConsultarSql(config: Base.ConsultaSql | Base.ConsultaSql[], dao?: DAO | undefined): Promise<Record<string, any>>;
     modelConsultarPaginado(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO | undefined): Promise<{
         totalReg: number;
         data: Record<string, any>[];

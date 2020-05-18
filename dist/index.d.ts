@@ -15,6 +15,7 @@ export declare const SupremusCore: {
     modelConsultar(config: import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta | import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta[], dao?: DAOI | undefined): Promise<Record<string, any>[]>;
     modelConsultarArray(config: import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta | import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta[], dao?: DAOI | undefined): Promise<Record<string, any>>;
     modelConsultarPorId(config: import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta | import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta[], dao?: DAOI | undefined): Promise<Record<string, any> | undefined>;
+    modelConsultarSql(config: import("supremus-core-2-ts-base/dist/src/consulta").ConsultaSql | import("supremus-core-2-ts-base/dist/src/consulta").ConsultaSql[], dao?: DAOI | undefined): Promise<Record<string, any>>;
     modelConsultarPaginado(config: import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta | import("supremus-core-2-ts-base/dist/src/consulta").ItemConsulta[], dao?: DAOI | undefined): Promise<{
         totalReg: number;
         data: Record<string, any>[];

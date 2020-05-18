@@ -139,9 +139,26 @@ var SupremusCore = {
             });
         });
     },
-    modelConsultarPaginado: function (config, dao) {
+    modelConsultarSql: function (config, dao) {
         return __awaiter(this, void 0, void 0, function () {
             var error_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, new Consulta_1.default().consultarSql(config, dao)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        error_5 = _a.sent();
+                        throw new Error(error_5);
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    },
+    modelConsultarPaginado: function (config, dao) {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -152,8 +169,8 @@ var SupremusCore = {
                         return [4 /*yield*/, new Consulta_1.default().consultaPaginada(config, dao)];
                     case 1: return [2 /*return*/, _a.sent()];
                     case 2:
-                        error_5 = _a.sent();
-                        throw new Error(error_5);
+                        error_6 = _a.sent();
+                        throw new Error(error_6);
                     case 3: return [2 /*return*/];
                 }
             });

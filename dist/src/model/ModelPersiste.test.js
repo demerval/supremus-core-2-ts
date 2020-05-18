@@ -307,6 +307,25 @@ describe('Teste de persistencia de dados', function () {
             }
         });
     }); });
+    it('Consulta sql', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var config, rows;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    config = [{
+                            key: 'u',
+                            sql: 'select codigo as id, nome from usuarios',
+                        }, {
+                            key: 'up',
+                            sql: 'select codigo as id, cod_usuario as id_usuario, permissao from usuarios_permissao'
+                        }];
+                    return [4 /*yield*/, SupremusCore_1.default.modelConsultarSql(config)];
+                case 1:
+                    rows = _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('Deletar registro', function () { return __awaiter(void 0, void 0, void 0, function () {
         var usuario, config, result;
         return __generator(this, function (_a) {
