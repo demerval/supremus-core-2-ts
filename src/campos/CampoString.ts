@@ -3,24 +3,30 @@ import { Enums } from 'supremus-core-2-ts-base';
 const md5 = require('js-md5');
 
 interface CampoStringConfig extends CampoConfig {
-  password?: boolean
+  password?: boolean;
+  blob?: boolean;
 }
 
 class CampoString extends Campo {
 
   private password: boolean;
+  private blob: boolean;
 
   constructor(nome: string, config?: CampoStringConfig) {
     super(nome);
 
     this.password = false;
+    this.blob = false;
     if (config) {
       if (config.password) {
         this.password = config.password;
       }
+      if (config.blob) {
+        this.blob = config.blob;
+      }
     }
 
-    this.configure(Campo.FieldType().VARCHAR, config);
+    this.configure(this.blob === true ? Campo.FieldType().BLOB : Campo.FieldType().VARCHAR, config);
   }
 
   getDados(valor: any, key: string): Dados {

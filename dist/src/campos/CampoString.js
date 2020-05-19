@@ -24,12 +24,16 @@ var CampoString = /** @class */ (function (_super) {
     function CampoString(nome, config) {
         var _this = _super.call(this, nome) || this;
         _this.password = false;
+        _this.blob = false;
         if (config) {
             if (config.password) {
                 _this.password = config.password;
             }
+            if (config.blob) {
+                _this.blob = config.blob;
+            }
         }
-        _this.configure(Campo_1.default.FieldType().VARCHAR, config);
+        _this.configure(_this.blob === true ? Campo_1.default.FieldType().BLOB : Campo_1.default.FieldType().VARCHAR, config);
         return _this;
     }
     CampoString.prototype.getDados = function (valor, key) {
