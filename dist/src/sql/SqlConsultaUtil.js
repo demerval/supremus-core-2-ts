@@ -71,8 +71,8 @@ var SqlConsultaUtil = /** @class */ (function () {
                             }
                             crs.pop();
                             crs.push(")");
-                            crs.push(comparador);
-                            criterioConsulta.push(crs.join(" "));
+                            //crs.push(comparador);
+                            criterioConsulta.push(crs.join(" "), comparador);
                         }
                         else {
                             var cr = this.getDadosCriterio(key, model, c);

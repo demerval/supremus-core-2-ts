@@ -167,12 +167,23 @@ describe('Teste de persistencia de dados', () => {
     const config: Base.ConsultaSql[] = [{
       key: 'u',
       sql: 'select codigo as id, nome from usuarios',
-    },{
+    }, {
       key: 'up',
       sql: 'select codigo as id, cod_usuario as id_usuario, permissao from usuarios_permissao'
     }];
 
     const rows = await SupremusCore.modelConsultarSql(config);
+  });
+
+  it('Consulta criterio array', async () => {
+    const config: Base.ItemConsulta = {
+      key: 'up',
+      tabela: 'usuarioPermissao',
+      criterios: [[{ campo: 'permissao', valor: 'admin', comparador: 'or' }, { campo: 'permissao', valor: 'user' }]],
+      ordem: ['permissao'],
+    };
+
+    const rows = await SupremusCore.modelConsultar(config);
   });
 
   it('Deletar registro', async () => {

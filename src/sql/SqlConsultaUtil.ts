@@ -31,8 +31,8 @@ class SqlConsultaUtil {
 
           crs.pop();
           crs.push(")");
-          crs.push(comparador);
-          criterioConsulta.push(crs.join(" "));
+          //crs.push(comparador);
+          criterioConsulta.push(crs.join(" "), comparador);
         } else {
           const cr = this.getDadosCriterio(key, model, c);
           criterioConsulta.push(cr);
@@ -42,7 +42,7 @@ class SqlConsultaUtil {
         }
       }
     }
-
+    
     if (criterioConsulta.length === 0) {
       return undefined;
     }
