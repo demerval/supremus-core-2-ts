@@ -10,14 +10,14 @@ var default_1 = /** @class */ (function () {
     default_1.prototype.open = function (callback, configDb) {
         if (configDb === undefined) {
             configDb = {
-                host: process.env.HOST,
-                port: Number(process.env.PORT),
-                database: process.env.DATABASE,
-                user: process.env.USER,
-                password: process.env.PASSWORD,
+                host: process.env.APP_DB_HOST,
+                port: Number(process.env.APP_DB_PORT),
+                database: process.env.APP_DB_DATABASE,
+                user: process.env.APP_DB_USER,
+                password: process.env.APP_DB_PASSWORD,
                 lowercase_keys: false,
-                role: process.env.ROLE,
-                pageSize: Number(process.env.PAGE_SIZE),
+                role: process.env.APP_DB_ROLE,
+                pageSize: Number(process.env.APP_DB_PAGE_SIZE),
             };
         }
         return node_firebird_1.default.attach(configDb, callback);

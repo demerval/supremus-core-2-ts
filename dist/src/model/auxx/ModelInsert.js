@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ModelUtil_1 = require("./ModelUtil");
 var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var ModelConverter_1 = require("./ModelConverter");
-var replicar = process.env.REPLICAR !== undefined ? Boolean(process.env.REPLICAR) : false;
+var replicar = process.env.REPLICAR !== undefined ? (process.env.REPLICAR === 'true' ? true : false) : false;
 var codReplicar = process.env.REPLICAR_COD !== undefined ? Number(process.env.REPLICAR_COD) : '001';
 exports.ModelInsert = {
     persiste: function (dao, model, dados) {
