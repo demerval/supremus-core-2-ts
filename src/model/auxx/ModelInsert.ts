@@ -5,7 +5,7 @@ import { ModelUtil } from "./ModelUtil";
 import { Enums } from "supremus-core-2-ts-base";
 import { ModelConverter } from "./ModelConverter";
 
-const replicar = process.env.REPLICAR !== undefined ? Boolean(process.env.REPLICAR) : false;
+const replicar = process.env.REPLICAR !== undefined ? (process.env.REPLICAR === 'true' ? true : false) : false;
 const codReplicar = process.env.REPLICAR_COD !== undefined ? Number(process.env.REPLICAR_COD) : '001';
 
 export const ModelInsert = {
