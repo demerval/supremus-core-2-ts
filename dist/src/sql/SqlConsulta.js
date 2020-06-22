@@ -36,6 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var SqlConsultaUtil_1 = __importDefault(require("./SqlConsultaUtil"));
 var ModelManager_1 = __importDefault(require("../model/ModelManager"));
+var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var SqlConsulta = /** @class */ (function () {
     function SqlConsulta() {
         this.sqlUtil = new SqlConsultaUtil_1.default();
@@ -54,7 +55,15 @@ var SqlConsulta = /** @class */ (function () {
                 if (c.funcao !== undefined) {
                     return c.funcao + "(" + c.keyTabela + "." + c.nomeCampo + ") AS " + c.alias;
                 }
-                camposAgrupar.push(c.keyTabela + "." + c.nomeCampo);
+                if (c.tipo === supremus_core_2_ts_base_1.Enums.FieldType.BLOB) {
+                    camposAgrupar.push("CAST(" + c.keyTabela + "." + c.nomeCampo + " AS VARCHAR(4096))");
+                }
+                else {
+                    camposAgrupar.push(c.keyTabela + "." + c.nomeCampo);
+                }
+            }
+            if (c.tipo === supremus_core_2_ts_base_1.Enums.FieldType.BLOB) {
+                return "CAST (" + c.keyTabela + "." + c.nomeCampo + " AS VARCHAR(4096)) AS " + c.alias;
             }
             return c.keyTabela + "." + c.nomeCampo + " AS " + c.alias;
         });

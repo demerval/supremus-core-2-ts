@@ -1,6 +1,6 @@
 import SqlConsultaUtil from "./SqlConsultaUtil";
 import ModelManager from "../model/ModelManager";
-import { Consulta as Base } from 'supremus-core-2-ts-base';
+import { Consulta as Base, Enums } from 'supremus-core-2-ts-base';
 class SqlConsulta {
 
   private sqlUtil: SqlConsultaUtil;
@@ -22,7 +22,16 @@ class SqlConsulta {
         if (c.funcao !== undefined) {
           return `${c.funcao}(${c.keyTabela}.${c.nomeCampo}) AS ${c.alias}`;
         }
-        camposAgrupar.push(`${c.keyTabela}.${c.nomeCampo}`);
+
+        if (c.tipo === Enums.FieldType.BLOB) {
+          camposAgrupar.push(`CAST(${c.keyTabela}.${c.nomeCampo} AS VARCHAR(4096))`);
+        } else {
+          camposAgrupar.push(`${c.keyTabela}.${c.nomeCampo}`);
+        }
+      }
+
+      if (c.tipo === Enums.FieldType.BLOB) {
+        return `CAST (${c.keyTabela}.${c.nomeCampo} AS VARCHAR(4096)) AS ${c.alias}`;
       }
 
       return `${c.keyTabela}.${c.nomeCampo} AS ${c.alias}`;
@@ -64,7 +73,7 @@ class SqlConsulta {
 
       sqlTotal = sqlTotal.toUpperCase();
     }
-   
+
     return {
       configs: this.configs,
       campos: dados.dadosCampos.campos,
@@ -153,7 +162,7 @@ class SqlConsulta {
     if (campo === undefined) {
       throw new Error(`O campo ${key} não foi localizado.`);
     }
-    
+
     return subConsulta.row[campo.alias.toUpperCase()];
   }
 
