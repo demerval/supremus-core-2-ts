@@ -50,12 +50,14 @@ class CampoString extends Campo {
       throw new Error(`O campo ${key} tem que ser uma string.`);
     }
 
-    if (this.getTamanhoMinimo() > 0 && this.getTamanhoMinimo() > valor.length) {
-      throw new Error(`O campo ${key} tem que ter no mínimo ${this.getTamanhoMinimo()} caracteres.`);
-    }
+    if (this.blob === false) {
+      if (this.getTamanhoMinimo() > 0 && this.getTamanhoMinimo() > valor.length) {
+        throw new Error(`O campo ${key} tem que ter no mínimo ${this.getTamanhoMinimo()} caracteres.`);
+      }
 
-    if (valor.length > this.getTamanhoMaximo()) {
-      throw new Error(`O campo ${key} tem que ter no máximo ${this.getTamanhoMaximo()} caracteres.`);
+      if (valor.length > this.getTamanhoMaximo()) {
+        throw new Error(`O campo ${key} tem que ter no máximo ${this.getTamanhoMaximo()} caracteres.`);
+      }
     }
 
     switch (this.getTipoCaracter()) {

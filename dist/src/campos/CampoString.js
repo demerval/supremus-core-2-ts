@@ -52,11 +52,13 @@ var CampoString = /** @class */ (function (_super) {
         if (typeof valor !== 'string') {
             throw new Error("O campo " + key + " tem que ser uma string.");
         }
-        if (this.getTamanhoMinimo() > 0 && this.getTamanhoMinimo() > valor.length) {
-            throw new Error("O campo " + key + " tem que ter no m\u00EDnimo " + this.getTamanhoMinimo() + " caracteres.");
-        }
-        if (valor.length > this.getTamanhoMaximo()) {
-            throw new Error("O campo " + key + " tem que ter no m\u00E1ximo " + this.getTamanhoMaximo() + " caracteres.");
+        if (this.blob === false) {
+            if (this.getTamanhoMinimo() > 0 && this.getTamanhoMinimo() > valor.length) {
+                throw new Error("O campo " + key + " tem que ter no m\u00EDnimo " + this.getTamanhoMinimo() + " caracteres.");
+            }
+            if (valor.length > this.getTamanhoMaximo()) {
+                throw new Error("O campo " + key + " tem que ter no m\u00E1ximo " + this.getTamanhoMaximo() + " caracteres.");
+            }
         }
         switch (this.getTipoCaracter()) {
             case supremus_core_2_ts_base_1.Enums.CaseType.NONE:
