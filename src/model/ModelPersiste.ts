@@ -3,8 +3,9 @@ import ModelManager from "./ModelManager";
 import { ModelInsert } from "./auxx/ModelInsert";
 import { ModelUpdate } from "./auxx/ModelUpdate";
 import { ModelDelete } from "./auxx/ModelDelete";
-import { Consulta as Base, Enums, Persistir } from "supremus-core-2-ts-base";
+import { Enums, Persistir } from "supremus-core-2-ts-base";
 import Consulta from "../sql/Consulta";
+import { ModelConverter } from "./auxx/ModelConverter";
 
 class ModelPersiste {
 
@@ -47,6 +48,22 @@ class ModelPersiste {
             throw new Error('Status inválido.');
         }
 
+      }
+
+      if (config.persistirSql) {
+        for (let c of config.persistirSql) {
+          const resultSql = await dao?.executarSql(c.sql);
+
+          if (c.retornar === true) {
+            let list: Record<string, any>[] = [];
+
+            if (resultSql !== undefined && resultSql.length > 0) {
+              list = ModelConverter.criarModelConsultaSql(resultSql);
+            }
+
+            result[c.id] = list;
+          }
+        }
       }
 
       if (config.consultar) {

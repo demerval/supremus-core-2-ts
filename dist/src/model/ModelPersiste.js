@@ -57,40 +57,41 @@ var ModelUpdate_1 = require("./auxx/ModelUpdate");
 var ModelDelete_1 = require("./auxx/ModelDelete");
 var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 var Consulta_1 = __importDefault(require("../sql/Consulta"));
+var ModelConverter_1 = require("./auxx/ModelConverter");
 var ModelPersiste = /** @class */ (function () {
     function ModelPersiste() {
     }
     ModelPersiste.prototype.persistir = function (config, dao) {
         return __awaiter(this, void 0, void 0, function () {
-            var openDao, result, _a, _b, c, model, dados, dados_1, dados_1_1, d, c_1, _c, itemInsert, itemUpdate, itemDelete, e_1_1, _d, _e, configConsulta, idConsulta, _f, _g, e_2_1, error_1;
-            var e_1, _h, e_3, _j, e_2, _k;
-            return __generator(this, function (_l) {
-                switch (_l.label) {
+            var openDao, result, _a, _b, c, model, dados, dados_1, dados_1_1, d, c_1, _c, itemInsert, itemUpdate, itemDelete, e_1_1, _d, _e, c, resultSql, list, e_2_1, _f, _g, configConsulta, idConsulta, _h, _j, e_3_1, error_1;
+            var e_1, _k, e_4, _l, e_2, _m, e_3, _o;
+            return __generator(this, function (_p) {
+                switch (_p.label) {
                     case 0:
                         openDao = (dao === undefined);
-                        _l.label = 1;
+                        _p.label = 1;
                     case 1:
-                        _l.trys.push([1, 28, 29, 30]);
+                        _p.trys.push([1, 36, 37, 38]);
                         if (!(openDao === true)) return [3 /*break*/, 3];
                         dao = new DAO_1.default();
                         return [4 /*yield*/, dao.openConexao(true)];
                     case 2:
-                        _l.sent();
-                        _l.label = 3;
+                        _p.sent();
+                        _p.label = 3;
                     case 3:
                         result = {};
-                        _l.label = 4;
+                        _p.label = 4;
                     case 4:
-                        _l.trys.push([4, 15, 16, 17]);
+                        _p.trys.push([4, 15, 16, 17]);
                         _a = __values(config.persistir), _b = _a.next();
-                        _l.label = 5;
+                        _p.label = 5;
                     case 5:
                         if (!!_b.done) return [3 /*break*/, 14];
                         c = _b.value;
                         model = ModelManager_1.default.getModel(c.id);
                         dados = model.getDados(c.dados);
                         try {
-                            for (dados_1 = (e_3 = void 0, __values(dados)), dados_1_1 = dados_1.next(); !dados_1_1.done; dados_1_1 = dados_1.next()) {
+                            for (dados_1 = (e_4 = void 0, __values(dados)), dados_1_1 = dados_1.next(); !dados_1_1.done; dados_1_1 = dados_1.next()) {
                                 d = dados_1_1.value;
                                 if (d[2] instanceof Array) {
                                     c_1 = d[2];
@@ -98,12 +99,12 @@ var ModelPersiste = /** @class */ (function () {
                                 }
                             }
                         }
-                        catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                        catch (e_4_1) { e_4 = { error: e_4_1 }; }
                         finally {
                             try {
-                                if (dados_1_1 && !dados_1_1.done && (_j = dados_1.return)) _j.call(dados_1);
+                                if (dados_1_1 && !dados_1_1.done && (_l = dados_1.return)) _l.call(dados_1);
                             }
-                            finally { if (e_3) throw e_3.error; }
+                            finally { if (e_4) throw e_4.error; }
                         }
                         _c = c.status;
                         switch (_c) {
@@ -114,17 +115,17 @@ var ModelPersiste = /** @class */ (function () {
                         return [3 /*break*/, 12];
                     case 6: return [4 /*yield*/, ModelInsert_1.ModelInsert.persiste(dao, model, dados)];
                     case 7:
-                        itemInsert = _l.sent();
+                        itemInsert = _p.sent();
                         result[c.id] = itemInsert;
                         return [3 /*break*/, 13];
                     case 8: return [4 /*yield*/, ModelUpdate_1.ModelUpdate.persiste(dao, model, dados)];
                     case 9:
-                        itemUpdate = _l.sent();
+                        itemUpdate = _p.sent();
                         result[c.id] = itemUpdate;
                         return [3 /*break*/, 13];
                     case 10: return [4 /*yield*/, ModelDelete_1.ModelDelete.persiste(dao, model, dados)];
                     case 11:
-                        itemDelete = _l.sent();
+                        itemDelete = _p.sent();
                         result[c.id] = itemDelete;
                         return [3 /*break*/, 13];
                     case 12: throw new Error('Status inválido.');
@@ -133,25 +134,60 @@ var ModelPersiste = /** @class */ (function () {
                         return [3 /*break*/, 5];
                     case 14: return [3 /*break*/, 17];
                     case 15:
-                        e_1_1 = _l.sent();
+                        e_1_1 = _p.sent();
                         e_1 = { error: e_1_1 };
                         return [3 /*break*/, 17];
                     case 16:
                         try {
-                            if (_b && !_b.done && (_h = _a.return)) _h.call(_a);
+                            if (_b && !_b.done && (_k = _a.return)) _k.call(_a);
                         }
                         finally { if (e_1) throw e_1.error; }
                         return [7 /*endfinally*/];
                     case 17:
-                        if (!config.consultar) return [3 /*break*/, 25];
-                        _l.label = 18;
+                        if (!config.persistirSql) return [3 /*break*/, 25];
+                        _p.label = 18;
                     case 18:
-                        _l.trys.push([18, 23, 24, 25]);
-                        _d = __values(config.consultar), _e = _d.next();
-                        _l.label = 19;
+                        _p.trys.push([18, 23, 24, 25]);
+                        _d = __values(config.persistirSql), _e = _d.next();
+                        _p.label = 19;
                     case 19:
                         if (!!_e.done) return [3 /*break*/, 22];
-                        configConsulta = _e.value;
+                        c = _e.value;
+                        return [4 /*yield*/, (dao === null || dao === void 0 ? void 0 : dao.executarSql(c.sql))];
+                    case 20:
+                        resultSql = _p.sent();
+                        if (c.retornar === true) {
+                            list = [];
+                            if (resultSql !== undefined && resultSql.length > 0) {
+                                list = ModelConverter_1.ModelConverter.criarModelConsultaSql(resultSql);
+                            }
+                            result[c.id] = list;
+                        }
+                        _p.label = 21;
+                    case 21:
+                        _e = _d.next();
+                        return [3 /*break*/, 19];
+                    case 22: return [3 /*break*/, 25];
+                    case 23:
+                        e_2_1 = _p.sent();
+                        e_2 = { error: e_2_1 };
+                        return [3 /*break*/, 25];
+                    case 24:
+                        try {
+                            if (_e && !_e.done && (_m = _d.return)) _m.call(_d);
+                        }
+                        finally { if (e_2) throw e_2.error; }
+                        return [7 /*endfinally*/];
+                    case 25:
+                        if (!config.consultar) return [3 /*break*/, 33];
+                        _p.label = 26;
+                    case 26:
+                        _p.trys.push([26, 31, 32, 33]);
+                        _f = __values(config.consultar), _g = _f.next();
+                        _p.label = 27;
+                    case 27:
+                        if (!!_g.done) return [3 /*break*/, 30];
+                        configConsulta = _g.value;
                         idConsulta = configConsulta.idConsulta;
                         if (idConsulta) {
                             if (configConsulta.criterios === undefined) {
@@ -159,44 +195,44 @@ var ModelPersiste = /** @class */ (function () {
                             }
                             configConsulta.criterios.push({ campo: idConsulta.campo, valor: result[idConsulta.campoResult[0]][idConsulta.campoResult[1]] });
                         }
-                        _f = result;
-                        _g = configConsulta.key;
+                        _h = result;
+                        _j = configConsulta.key;
                         return [4 /*yield*/, new Consulta_1.default().consultar(configConsulta, dao)];
-                    case 20:
-                        _f[_g] = _l.sent();
-                        _l.label = 21;
-                    case 21:
-                        _e = _d.next();
-                        return [3 /*break*/, 19];
-                    case 22: return [3 /*break*/, 25];
-                    case 23:
-                        e_2_1 = _l.sent();
-                        e_2 = { error: e_2_1 };
-                        return [3 /*break*/, 25];
-                    case 24:
-                        try {
-                            if (_e && !_e.done && (_k = _d.return)) _k.call(_d);
-                        }
-                        finally { if (e_2) throw e_2.error; }
-                        return [7 /*endfinally*/];
-                    case 25:
-                        if (!(openDao === true)) return [3 /*break*/, 27];
-                        return [4 /*yield*/, dao.confirmarTransacao()];
-                    case 26:
-                        _l.sent();
-                        _l.label = 27;
-                    case 27: return [2 /*return*/, result];
                     case 28:
-                        error_1 = _l.sent();
-                        throw new Error(error_1);
+                        _h[_j] = _p.sent();
+                        _p.label = 29;
                     case 29:
+                        _g = _f.next();
+                        return [3 /*break*/, 27];
+                    case 30: return [3 /*break*/, 33];
+                    case 31:
+                        e_3_1 = _p.sent();
+                        e_3 = { error: e_3_1 };
+                        return [3 /*break*/, 33];
+                    case 32:
+                        try {
+                            if (_g && !_g.done && (_o = _f.return)) _o.call(_f);
+                        }
+                        finally { if (e_3) throw e_3.error; }
+                        return [7 /*endfinally*/];
+                    case 33:
+                        if (!(openDao === true)) return [3 /*break*/, 35];
+                        return [4 /*yield*/, dao.confirmarTransacao()];
+                    case 34:
+                        _p.sent();
+                        _p.label = 35;
+                    case 35: return [2 /*return*/, result];
+                    case 36:
+                        error_1 = _p.sent();
+                        throw new Error(error_1);
+                    case 37:
                         if (openDao === true) {
                             if (dao.isConexaoOpen()) {
                                 dao.closeConexao();
                             }
                         }
                         return [7 /*endfinally*/];
-                    case 30: return [2 /*return*/];
+                    case 38: return [2 /*return*/];
                 }
             });
         });

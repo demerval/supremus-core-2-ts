@@ -123,9 +123,13 @@ function nomeSaida(nome: string): string {
     .split('_')
     .map((word: string, index: number) => {
       if (index === 0) {
+        if (word === 'CODIGO' || word === 'COD') {
+          return 'id';
+        }
         return word.toLowerCase();
       }
-      return word[0].toUpperCase() + word.slice(1).toLowerCase()
+      
+      return word[0].toUpperCase() + word.slice(1).toLowerCase();
     })
     .join('');
 }

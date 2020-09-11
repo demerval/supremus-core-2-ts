@@ -87,6 +87,43 @@ describe('Teste de persistencia de dados', () => {
     idUsuario = result.usuario.id;
   });
 
+  it('Persistir com sql', async () => {
+    let usuario = await SupremusCore.modelConsultarPorId({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } });
+    usuario!.nome = 'suporte teste';
+
+    const config: Persistir.ConfigPersist = {
+      persistir: [
+        { id: 'usuario', status: Enums.Status.UPDATE, dados: usuario },
+      ],
+      persistirSql: [
+        { id: 'up', retornar: true, sql: `select * from usuarios_permissao where cod_usuario = ${idUsuario}` },
+      ]
+    };
+
+    const result = await SupremusCore.modelPersiste(config);
+    expect(Object.keys(result)).toEqual(['usuario', 'up']);
+    expect(Object.keys(result.usuario)).toEqual(['id', 'nome', 'senha', 'ativo']);
+    expect(Object.keys(result.up[0])).toEqual(['id', 'idUsuario', 'permissao']);
+  });
+
+  it('Persistir com sql update', async () => {
+    let usuario = await SupremusCore.modelConsultarPorId({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } });
+    usuario!.nome = 'suporte teste';
+
+    const config: Persistir.ConfigPersist = {
+      persistir: [
+        { id: 'usuario', status: Enums.Status.UPDATE, dados: usuario },
+      ],
+      persistirSql: [
+        { id: 'up', retornar: false, sql: `update usuarios_permissao set permissao = 'user' where cod_usuario = ${idUsuario}` },
+      ]
+    };
+
+    const result = await SupremusCore.modelPersiste(config);
+    expect(Object.keys(result)).toEqual(['usuario']);
+    expect(Object.keys(result.usuario)).toEqual(['id', 'nome', 'senha', 'ativo']);
+  });
+
   it('Editar registro', async () => {
     let usuario = await SupremusCore.modelConsultarPorId({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } });
     usuario!.nome = 'suporte 2';

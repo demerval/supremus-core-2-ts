@@ -203,6 +203,57 @@ describe('Teste de persistencia de dados', function () {
             }
         });
     }); });
+    it('Persistir com sql', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var usuario, config, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, SupremusCore_1.default.modelConsultarPorId({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } })];
+                case 1:
+                    usuario = _a.sent();
+                    usuario.nome = 'suporte teste';
+                    config = {
+                        persistir: [
+                            { id: 'usuario', status: supremus_core_2_ts_base_1.Enums.Status.UPDATE, dados: usuario },
+                        ],
+                        persistirSql: [
+                            { id: 'up', retornar: true, sql: "select * from usuarios_permissao where cod_usuario = " + idUsuario },
+                        ]
+                    };
+                    return [4 /*yield*/, SupremusCore_1.default.modelPersiste(config)];
+                case 2:
+                    result = _a.sent();
+                    expect(Object.keys(result)).toEqual(['usuario', 'up']);
+                    expect(Object.keys(result.usuario)).toEqual(['id', 'nome', 'senha', 'ativo']);
+                    expect(Object.keys(result.up[0])).toEqual(['id', 'idUsuario', 'permissao']);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('Persistir com sql update', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var usuario, config, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, SupremusCore_1.default.modelConsultarPorId({ key: 'u', tabela: 'usuario', porId: { id: idUsuario } })];
+                case 1:
+                    usuario = _a.sent();
+                    usuario.nome = 'suporte teste';
+                    config = {
+                        persistir: [
+                            { id: 'usuario', status: supremus_core_2_ts_base_1.Enums.Status.UPDATE, dados: usuario },
+                        ],
+                        persistirSql: [
+                            { id: 'up', retornar: false, sql: "update usuarios_permissao set permissao = 'user' where cod_usuario = " + idUsuario },
+                        ]
+                    };
+                    return [4 /*yield*/, SupremusCore_1.default.modelPersiste(config)];
+                case 2:
+                    result = _a.sent();
+                    expect(Object.keys(result)).toEqual(['usuario']);
+                    expect(Object.keys(result.usuario)).toEqual(['id', 'nome', 'senha', 'ativo']);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('Editar registro', function () { return __awaiter(void 0, void 0, void 0, function () {
         var usuario, config, result;
         return __generator(this, function (_a) {

@@ -254,6 +254,9 @@ function nomeSaida(nome) {
         .split('_')
         .map(function (word, index) {
         if (index === 0) {
+            if (word === 'CODIGO' || word === 'COD') {
+                return 'id';
+            }
             return word.toLowerCase();
         }
         return word[0].toUpperCase() + word.slice(1).toLowerCase();

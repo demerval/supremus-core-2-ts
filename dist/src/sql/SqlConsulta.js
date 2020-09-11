@@ -150,7 +150,7 @@ var SqlConsulta = /** @class */ (function () {
             if (criterio === undefined) {
                 criterio = '';
             }
-            criterio += config.key + "." + this._getCampo(subConsulta.link[0], dadosCampos.campos) + " = " + this._getValor(subConsulta.link[1], subConsulta);
+            criterio += config.key + "." + this._getCampo(subConsulta.link[0], dadosCampos.campos) + " = '" + this._getValor(subConsulta.link[1], subConsulta) + "'";
         }
         var ordem = this.sqlUtil.getDadosOrdem(this.configs, config.ordem);
         return {
