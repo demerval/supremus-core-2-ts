@@ -1,6 +1,6 @@
-import Model from "./model/Model";
-import DAO from "./database/DAO";
-import { Consulta as Base, Persistir } from "supremus-core-2-ts-base";
+import Model from './model/Model';
+import DAO from './database/DAO';
+import { Consulta as Base, Persistir } from 'supremus-core-2-ts-base';
 declare const SupremusCore: {
     carregarModels(dirModels: string): Promise<boolean>;
     addModel(model: Model): void;

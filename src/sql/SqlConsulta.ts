@@ -1,8 +1,7 @@
-import SqlConsultaUtil from "./SqlConsultaUtil";
-import ModelManager from "../model/ModelManager";
+import SqlConsultaUtil from './SqlConsultaUtil';
+import ModelManager from '../model/ModelManager';
 import { Consulta as Base, Enums } from 'supremus-core-2-ts-base';
 class SqlConsulta {
-
   private sqlUtil: SqlConsultaUtil;
   private configs: Map<string, Base.SqlConsultaConfig>;
 
@@ -11,75 +10,90 @@ class SqlConsulta {
     this.configs = new Map();
   }
 
-  getDadosConsulta(config: Base.ItemConsulta, isPaginado = false, subConsulta?: Base.SubConsultaConfig): Base.ConsultaConfig {
-    let paginado = isPaginado === true ? `FIRST ${config.paginado?.qtdeRegistros} SKIP ${config.paginado?.pagina! * config.paginado?.qtdeRegistros!} ` : '';
-    const dados = this.getDados(config, subConsulta);
-    const agrupar = dados.dadosCampos.agrupar;
-    const camposAgrupar: string[] = [];
+  getDadosConsulta(
+    config: Base.ItemConsulta,
+    isPaginado = false,
+    subConsulta?: Base.SubConsultaConfig,
+  ): Base.ConsultaConfig {
+    try {
+      let paginado =
+        isPaginado === true
+          ? `FIRST ${config.paginado?.qtdeRegistros} SKIP ${
+              config.paginado?.pagina! * config.paginado?.qtdeRegistros!
+            } `
+          : '';
+      const dados = this.getDados(config, subConsulta);
+      const agrupar = dados.dadosCampos.agrupar;
+      const camposAgrupar: string[] = [];
 
-    const campos = dados.dadosCampos.campos.map(c => {
-      if (agrupar === true) {
-        if (c.funcao !== undefined) {
-          return `${c.funcao}(${c.keyTabela}.${c.nomeCampo}) AS ${c.alias}`;
+      const campos = dados.dadosCampos.campos.map(c => {
+        if (agrupar === true) {
+          if (c.funcao !== undefined) {
+            return `${c.funcao}(${c.keyTabela}.${c.nomeCampo}) AS ${c.alias}`;
+          }
+
+          if (c.tipo === Enums.FieldType.BLOB) {
+            camposAgrupar.push(`CAST(${c.keyTabela}.${c.nomeCampo} AS VARCHAR(4096))`);
+          } else {
+            camposAgrupar.push(`${c.keyTabela}.${c.nomeCampo}`);
+          }
         }
 
         if (c.tipo === Enums.FieldType.BLOB) {
-          camposAgrupar.push(`CAST(${c.keyTabela}.${c.nomeCampo} AS VARCHAR(4096))`);
-        } else {
-          camposAgrupar.push(`${c.keyTabela}.${c.nomeCampo}`);
+          return `CAST (${c.keyTabela}.${c.nomeCampo} AS VARCHAR(4096)) AS ${c.alias}`;
         }
-      }
 
-      if (c.tipo === Enums.FieldType.BLOB) {
-        return `CAST (${c.keyTabela}.${c.nomeCampo} AS VARCHAR(4096)) AS ${c.alias}`;
-      }
+        return `${c.keyTabela}.${c.nomeCampo} AS ${c.alias}`;
+      });
 
-      return `${c.keyTabela}.${c.nomeCampo} AS ${c.alias}`;
-    });
-
-    let sql = `SELECT ${paginado}${campos.join(', ')} FROM ${dados.tabela}`;
-    if (dados.joins) {
-      sql += ` ${dados.joins.join(' ')}`;
-    }
-    if (dados.criterio) {
-      sql += ` WHERE ${dados.criterio}`;
-    }
-    if (agrupar === true && camposAgrupar.length > 0) {
-      sql += ` GROUP BY ${camposAgrupar.join(', ')}`;
-    }
-    if (dados.ordem) {
-      sql += ` ORDER BY ${dados.ordem}`;
-    }
-
-    let sqlTotal = undefined;
-    if (isPaginado === true) {
-      const model = ModelManager.getModel(config.tabela);
-      const campoChave = model.getChavePrimaria();
-      const funcoes: string[] = [`COUNT(${config.key}.${campoChave[1].getNome()}) AS TOTAL`];
-      if (config.paginado?.funcoes) {
-        for (let fnc of config.paginado.funcoes) {
-          const campo = this._getCampoModel(fnc.key, fnc.campo);
-          funcoes.push(`${fnc.funcao === undefined ? 'SUM' : fnc.funcao}(${fnc.key}.${campo.getNome()}) AS ${fnc.alias}`);
-        }
-      }
-
-      sqlTotal = `SELECT ${funcoes.join(', ')} FROM ${dados.tabela}`;
+      let sql = `SELECT ${paginado}${campos.join(', ')} FROM ${dados.tabela}`;
       if (dados.joins) {
-        sqlTotal += ` ${dados.joins.join(' ')}`;
+        sql += ` ${dados.joins.join(' ')}`;
       }
       if (dados.criterio) {
-        sqlTotal += ` WHERE ${dados.criterio}`;
+        sql += ` WHERE ${dados.criterio}`;
+      }
+      if (agrupar === true && camposAgrupar.length > 0) {
+        sql += ` GROUP BY ${camposAgrupar.join(', ')}`;
+      }
+      if (dados.ordem) {
+        sql += ` ORDER BY ${dados.ordem}`;
       }
 
-      sqlTotal = sqlTotal.toUpperCase();
-    }
+      let sqlTotal = undefined;
+      if (isPaginado === true) {
+        const model = ModelManager.getModel(config.tabela);
+        const campoChave = model.getChavePrimaria();
+        const funcoes: string[] = [`COUNT(${config.key}.${campoChave[1].getNome()}) AS TOTAL`];
+        if (config.paginado?.funcoes) {
+          for (let fnc of config.paginado.funcoes) {
+            const campo = this._getCampoModel(fnc.key, fnc.campo);
+            funcoes.push(
+              `${fnc.funcao === undefined ? 'SUM' : fnc.funcao}(${fnc.key}.${campo.getNome()}) AS ${fnc.alias}`,
+            );
+          }
+        }
 
-    return {
-      configs: this.configs,
-      campos: dados.dadosCampos.campos,
-      sql: sql.toUpperCase(),
-      sqlTotal,
-    };
+        sqlTotal = `SELECT ${funcoes.join(', ')} FROM ${dados.tabela}`;
+        if (dados.joins) {
+          sqlTotal += ` ${dados.joins.join(' ')}`;
+        }
+        if (dados.criterio) {
+          sqlTotal += ` WHERE ${dados.criterio}`;
+        }
+
+        sqlTotal = sqlTotal.toUpperCase();
+      }
+
+      return {
+        configs: this.configs,
+        campos: dados.dadosCampos.campos,
+        sql: sql.toUpperCase(),
+        sqlTotal,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 
   getDados(config: Base.ItemConsulta, subConsulta?: Base.SubConsultaConfig) {
@@ -108,7 +122,10 @@ class SqlConsulta {
       if (criterio === undefined) {
         criterio = '';
       }
-      criterio += `${config.key}.${this._getCampo(subConsulta.link[0], dadosCampos.campos)} = '${this._getValor(subConsulta.link[1], subConsulta)}'`;
+      criterio += `${config.key}.${this._getCampo(subConsulta.link[0], dadosCampos.campos)} = '${this._getValor(
+        subConsulta.link[1],
+        subConsulta,
+      )}'`;
     }
 
     const ordem = this.sqlUtil.getDadosOrdem(this.configs, config.ordem);
@@ -118,7 +135,7 @@ class SqlConsulta {
       dadosCampos,
       joins,
       criterio,
-      ordem
+      ordem,
     };
   }
 
@@ -184,7 +201,6 @@ class SqlConsulta {
 
     return campo;
   }
-
 }
 
 export default SqlConsulta;

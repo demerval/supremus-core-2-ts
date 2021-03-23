@@ -1,9 +1,8 @@
-import Model from "./Model";
+import Model from './Model';
 
 const models: Map<string, Model> = new Map();
 
 class ModelManager {
-
   static addModel(model: Model) {
     const modelExiste = models.get(model.getNome());
     if (modelExiste !== undefined) {
@@ -25,7 +24,7 @@ class ModelManager {
   static getModels() {
     return models.values();
   }
-  
+
   static clearModels() {
     models.clear();
   }

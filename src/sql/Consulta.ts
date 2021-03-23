@@ -1,13 +1,12 @@
-import DAO from "../database/DAO";
-import SqlConsulta from "./SqlConsulta";
-import { ModelConverter } from "../model/auxx/ModelConverter";
-import ModelManager from "../model/ModelManager";
-import { Consulta as Base } from "supremus-core-2-ts-base";
+import DAO from '../database/DAO';
+import SqlConsulta from './SqlConsulta';
+import { ModelConverter } from '../model/auxx/ModelConverter';
+import ModelManager from '../model/ModelManager';
+import { Consulta as Base } from 'supremus-core-2-ts-base';
 
 class Consulta {
-
   async consultar(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any>[]> {
-    let openDao = (dao === undefined);
+    let openDao = dao === undefined;
 
     try {
       if (openDao === true) {
@@ -28,7 +27,7 @@ class Consulta {
 
       return await ModelConverter.criarModelConsulta(dados.configs, dados.campos, rows);
     } catch (error) {
-      throw new Error(error);
+      throw error;
     } finally {
       if (openDao === true) {
         if (dao!.isConexaoOpen()) {
@@ -39,7 +38,7 @@ class Consulta {
   }
 
   async consultarArray(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any>> {
-    let openDao = (dao === undefined);
+    let openDao = dao === undefined;
 
     try {
       if (openDao === true) {
@@ -66,7 +65,7 @@ class Consulta {
 
       return rowsResult;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     } finally {
       if (openDao === true) {
         if (dao!.isConexaoOpen()) {
@@ -77,7 +76,7 @@ class Consulta {
   }
 
   async consultarPorId(config: Base.ItemConsulta, dao?: DAO): Promise<Record<string, any> | undefined> {
-    let openDao = (dao === undefined);
+    let openDao = dao === undefined;
 
     if (config.porId === undefined) {
       throw new Error('Erro na configuração da consulta porId.');
@@ -108,7 +107,7 @@ class Consulta {
 
       return;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     } finally {
       if (openDao === true) {
         if (dao!.isConexaoOpen()) {
@@ -118,8 +117,11 @@ class Consulta {
     }
   }
 
-  async consultaPaginada(config: Base.ItemConsulta, dao?: DAO): Promise<{ totalReg: number, data: Record<string, any>[], resultFuncoes: Record<string, any>[] }> {
-    let openDao = (dao === undefined);
+  async consultaPaginada(
+    config: Base.ItemConsulta,
+    dao?: DAO,
+  ): Promise<{ totalReg: number; data: Record<string, any>[]; resultFuncoes: Record<string, any>[] }> {
+    let openDao = dao === undefined;
 
     if (config.paginado === undefined) {
       throw new Error('Erro na configuração da consulta paginada.');
@@ -149,7 +151,7 @@ class Consulta {
       const data = await ModelConverter.criarModelConsulta(dados.configs, dados.campos, rows);
       return { totalReg, data, resultFuncoes };
     } catch (error) {
-      throw new Error(error);
+      throw error;
     } finally {
       if (openDao === true) {
         if (dao!.isConexaoOpen()) {
@@ -160,7 +162,7 @@ class Consulta {
   }
 
   async consultarSql(config: Base.ConsultaSql | Base.ConsultaSql[], dao?: DAO): Promise<Record<string, any>> {
-    let openDao = (dao === undefined);
+    let openDao = dao === undefined;
 
     try {
       if (openDao === true) {
@@ -184,7 +186,7 @@ class Consulta {
 
       return result;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     } finally {
       if (openDao === true) {
         if (dao!.isConexaoOpen()) {
@@ -197,7 +199,7 @@ class Consulta {
   async _subConsulta(dao: DAO, campos: Base.CampoConsulta[], subConsultas: Base.SubConsulta[], rows: any[]) {
     for (let cs of subConsultas) {
       for (let row of rows) {
-        const subConfig: Base.SubConsultaConfig = { link: cs.link, campos, row }
+        const subConfig: Base.SubConsultaConfig = { link: cs.link, campos, row };
 
         const dadosSub = new SqlConsulta().getDadosConsulta(cs, false, subConfig);
         const rowsSub = await dao.executarSql(dadosSub.sql);
@@ -206,7 +208,6 @@ class Consulta {
       }
     }
   }
-
 }
 
 export default Consulta;

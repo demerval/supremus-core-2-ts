@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = require("supremus-core-2-../../../index");
-var campos = new Map();
+const index_1 = require("supremus-core-2-../../../index");
+const campos = new Map();
 campos.set('id', new index_1.CampoNumber('codigo', { chavePrimaria: { autoIncremento: true } }));
 campos.set('data', new index_1.CampoDate('data', { obrigatorio: true }));
 campos.set('hora', new index_1.CampoString('hora', { tamanhoMaximo: 5 }));

@@ -1,16 +1,15 @@
-import DAO from "../database/DAO";
-import ModelManager from "./ModelManager";
-import { ModelInsert } from "./auxx/ModelInsert";
-import { ModelUpdate } from "./auxx/ModelUpdate";
-import { ModelDelete } from "./auxx/ModelDelete";
-import { Enums, Persistir } from "supremus-core-2-ts-base";
-import Consulta from "../sql/Consulta";
-import { ModelConverter } from "./auxx/ModelConverter";
+import DAO from '../database/DAO';
+import ModelManager from './ModelManager';
+import { ModelInsert } from './auxx/ModelInsert';
+import { ModelUpdate } from './auxx/ModelUpdate';
+import { ModelDelete } from './auxx/ModelDelete';
+import { Enums, Persistir } from 'supremus-core-2-ts-base';
+import Consulta from '../sql/Consulta';
+import { ModelConverter } from './auxx/ModelConverter';
 
 class ModelPersiste {
-
   async persistir(config: Persistir.ConfigPersist, dao?: DAO) {
-    let openDao = (dao === undefined);
+    let openDao = dao === undefined;
 
     try {
       if (openDao === true) {
@@ -47,7 +46,6 @@ class ModelPersiste {
           default:
             throw new Error('Status inválido.');
         }
-
       }
 
       if (config.persistirSql) {
@@ -73,7 +71,10 @@ class ModelPersiste {
             if (configConsulta.criterios === undefined) {
               configConsulta.criterios = [];
             }
-            configConsulta.criterios.push({ campo: idConsulta.campo, valor: result[idConsulta.campoResult[0]][idConsulta.campoResult[1]] });
+            configConsulta.criterios.push({
+              campo: idConsulta.campo,
+              valor: result[idConsulta.campoResult[0]][idConsulta.campoResult[1]],
+            });
           }
 
           result[configConsulta.key] = await new Consulta().consultar(configConsulta, dao!);
@@ -86,7 +87,7 @@ class ModelPersiste {
 
       return result;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     } finally {
       if (openDao === true) {
         if (dao!.isConexaoOpen()) {
@@ -95,7 +96,6 @@ class ModelPersiste {
       }
     }
   }
-
 }
 
 export default ModelPersiste;

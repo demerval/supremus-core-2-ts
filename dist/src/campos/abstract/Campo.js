@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
-var Campo = /** @class */ (function () {
-    function Campo(nome) {
+const supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
+class Campo {
+    constructor(nome) {
         this.tipo = supremus_core_2_ts_base_1.Enums.FieldType.VARCHAR;
         this.config = {};
         this.nome = nome.toLowerCase();
     }
-    Campo.prototype.configure = function (tipo, config) {
+    configure(tipo, config) {
         this.tipo = tipo;
         if (config) {
             this.config = config;
@@ -27,52 +27,51 @@ var Campo = /** @class */ (function () {
         if (this.config.valorPadrao === undefined) {
             this.config.valorPadrao = null;
         }
-    };
-    Campo.FieldType = function () {
+    }
+    static FieldType() {
         return supremus_core_2_ts_base_1.Enums.FieldType;
-    };
-    Campo.prototype.getNome = function () {
+    }
+    getNome() {
         return this.nome;
-    };
-    Campo.prototype.getTipo = function () {
+    }
+    getTipo() {
         return this.tipo;
-    };
-    Campo.prototype.isChavePrimaria = function () {
+    }
+    isChavePrimaria() {
         return this.config.chavePrimaria !== undefined;
-    };
-    Campo.prototype.getChavePrimaria = function () {
+    }
+    getChavePrimaria() {
         return this.config.chavePrimaria;
-    };
-    Campo.prototype.isChaveEstrangeira = function () {
+    }
+    isChaveEstrangeira() {
         return this.config.chaveEstrangeira !== undefined;
-    };
-    Campo.prototype.isNaoReplicar = function () {
+    }
+    isNaoReplicar() {
         return this.config.naoReplicar;
-    };
-    Campo.prototype.getChaveEstrangeira = function () {
+    }
+    getChaveEstrangeira() {
         return this.config.chaveEstrangeira;
-    };
-    Campo.prototype.getTipoCaracter = function () {
+    }
+    getTipoCaracter() {
         return this.config.tipoCaracter;
-    };
-    Campo.prototype.getDecimal = function () {
+    }
+    getDecimal() {
         return this.config.decimal;
-    };
-    Campo.prototype.isObrigatorio = function () {
+    }
+    isObrigatorio() {
         return this.config.obrigatorio;
-    };
-    Campo.prototype.isUnico = function () {
+    }
+    isUnico() {
         return this.config.unico;
-    };
-    Campo.prototype.getValorPadrao = function () {
+    }
+    getValorPadrao() {
         return this.config.valorPadrao;
-    };
-    Campo.prototype.getTamanhoMinimo = function () {
+    }
+    getTamanhoMinimo() {
         return this.config.tamanhoMinimo;
-    };
-    Campo.prototype.getTamanhoMaximo = function () {
+    }
+    getTamanhoMaximo() {
         return this.config.tamanhoMaximo;
-    };
-    return Campo;
-}());
+    }
+}
 exports.default = Campo;

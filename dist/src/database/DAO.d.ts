@@ -5,11 +5,11 @@ declare class DAO {
     private db?;
     private transaction?;
     constructor(configDb?: Options);
-    openConexao(openTransacao?: boolean): Promise<unknown>;
+    openConexao(openTransacao?: boolean): Promise<void>;
     isConexaoOpen(): boolean;
     isTransacao(): boolean;
     executarSql(sql: string, params?: any): Promise<any[]>;
-    confirmarTransacao(): Promise<unknown>;
+    confirmarTransacao(): Promise<void>;
     closeConexao(): void;
     gerarId(generatorName: string): Promise<any>;
 }

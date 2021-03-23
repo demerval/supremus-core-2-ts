@@ -3,7 +3,6 @@ import firebird, { Options, DatabaseCallback, Database, Transaction } from 'node
 export type CallbackOpenTransaction = (err: any, transaction?: Transaction) => void;
 
 export default class {
-
   open(callback: DatabaseCallback, configDb?: Options) {
     if (configDb === undefined) {
       configDb = {
@@ -15,7 +14,7 @@ export default class {
         lowercase_keys: false,
         role: process.env.APP_DB_ROLE,
         pageSize: Number(process.env.APP_DB_PAGE_SIZE),
-      }
+      };
     }
 
     return firebird.attach(configDb, callback);
@@ -31,5 +30,4 @@ export default class {
       callback(false, transaction);
     });
   }
-
-};
+}

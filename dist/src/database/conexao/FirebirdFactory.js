@@ -3,11 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var node_firebird_1 = __importDefault(require("node-firebird"));
-var default_1 = /** @class */ (function () {
-    function default_1() {
-    }
-    default_1.prototype.open = function (callback, configDb) {
+const node_firebird_1 = __importDefault(require("node-firebird"));
+class default_1 {
+    open(callback, configDb) {
         if (configDb === undefined) {
             configDb = {
                 host: process.env.APP_DB_HOST,
@@ -21,8 +19,8 @@ var default_1 = /** @class */ (function () {
             };
         }
         return node_firebird_1.default.attach(configDb, callback);
-    };
-    default_1.prototype.openTransaction = function (db, callback) {
+    }
+    openTransaction(db, callback) {
         db.transaction(node_firebird_1.default.ISOLATION_READ_COMMITED, function (err, transaction) {
             if (err) {
                 callback(true);
@@ -30,8 +28,7 @@ var default_1 = /** @class */ (function () {
             }
             callback(false, transaction);
         });
-    };
-    return default_1;
-}());
+    }
+}
 exports.default = default_1;
 ;

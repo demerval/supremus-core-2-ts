@@ -2,7 +2,6 @@ import { Database, Transaction, Options } from 'node-firebird';
 import FirebirdFactory from './conexao/FirebirdFactory';
 
 class DAO {
-
   private configDb?: Options;
   private fb: FirebirdFactory;
   private db?: Database;
@@ -13,7 +12,7 @@ class DAO {
     this.configDb = configDb;
   }
 
-  openConexao(openTransacao?: boolean) {
+  openConexao(openTransacao?: boolean): Promise<void> {
     return new Promise((resolve, reject) => {
       this.transaction = undefined;
       this.db = undefined;
@@ -75,7 +74,7 @@ class DAO {
     });
   }
 
-  confirmarTransacao() {
+  confirmarTransacao(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.transaction?.commit(function (err) {
         if (err) {
