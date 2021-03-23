@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = require("../../../index");
-var supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
-var campos = new Map();
+const index_1 = require("../../../index");
+const supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
+const campos = new Map();
 campos.set('id', new index_1.CampoNumber('codigo', { chavePrimaria: { autoIncremento: true } }));
 campos.set('dataCadastro', new index_1.CampoDate('dataCadastro', { obrigatorio: true }));
 campos.set('razao', new index_1.CampoString('razao', { obrigatorio: true, unico: true }));

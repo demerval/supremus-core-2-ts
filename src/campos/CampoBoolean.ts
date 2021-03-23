@@ -1,7 +1,6 @@
 import Campo, { CampoConfig, Dados } from './abstract/Campo';
 
 class CampoBoolean extends Campo {
-
   constructor(nome: string, config?: CampoConfig) {
     super(nome);
 
@@ -81,7 +80,7 @@ class CampoBoolean extends Campo {
       }
     }
 
-    throw new Error(`Erro no valor informado o valor tem que ser booleano. Valor: ${valor}`)
+    throw new Error(`Erro no valor informado o valor tem que ser booleano. Valor: ${valor}`);
   }
 }
 

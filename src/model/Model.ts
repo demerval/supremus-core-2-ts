@@ -3,7 +3,6 @@ import DAO from '../database/DAO';
 import { Consulta as Base, Enums } from 'supremus-core-2-ts-base';
 
 class Model {
-
   private nome: string;
   private nomeTabela: string;
   private campos: Map<string, Campo>;
@@ -70,7 +69,10 @@ class Model {
     return config;
   }
 
-  getCamposConsulta(key: string, campos?: (string | Base.CampoFuncao)[]): { agrupar: boolean, campos: Base.CampoConsulta[] } {
+  getCamposConsulta(
+    key: string,
+    campos?: (string | Base.CampoFuncao)[],
+  ): { agrupar: boolean; campos: Base.CampoConsulta[] } {
     const camposConsulta: Base.CampoConsulta[] = [];
     let agrupar = false;
 
@@ -81,7 +83,7 @@ class Model {
           nomeCampo: c.getNome(),
           alias: `${key}_${c.getNome()}`,
           keyCampo: k,
-          tipo: c.getTipo()
+          tipo: c.getTipo(),
         });
       }
     } else {
@@ -96,11 +98,11 @@ class Model {
             nomeCampo: campo.getNome(),
             alias: `${key}_${campo.getNome()}`,
             keyCampo: c as string,
-            tipo: campo.getTipo()
+            tipo: campo.getTipo(),
           });
         } else {
           agrupar = true;
-          const cFunc = (c as Base.CampoFuncao);
+          const cFunc = c as Base.CampoFuncao;
           const campo = this.getCampo(cFunc.campo);
           if (campo === undefined) {
             throw new Error(`O campo ${cFunc.campo} não foi localizado.`);
@@ -111,7 +113,7 @@ class Model {
             alias: cFunc.alias,
             keyCampo: cFunc.campo,
             tipo: campo.getTipo(),
-            funcao: cFunc.funcao === undefined ? Enums.FuncoesSql.SUM : cFunc.funcao
+            funcao: cFunc.funcao === undefined ? Enums.FuncoesSql.SUM : cFunc.funcao,
           });
         }
       }
@@ -120,14 +122,13 @@ class Model {
     return { agrupar, campos: camposConsulta };
   }
 
-  async onEstruturaVerificada(dao: DAO) { };
+  async onEstruturaVerificada(dao: DAO) {}
 
-  async onDadosCarregado(item: any) { }
+  async onDadosCarregado(item: any) {}
 
-  async onAntesPersistir(dao: DAO, item: any, status: Enums.Status) { }
+  async onAntesPersistir(dao: DAO, item: any, status: Enums.Status) {}
 
-  async onDepoisPersistir(dao: DAO, item: any, status: Enums.Status) { }
-
+  async onDepoisPersistir(dao: DAO, item: any, status: Enums.Status) {}
 }
 
 export default Model;

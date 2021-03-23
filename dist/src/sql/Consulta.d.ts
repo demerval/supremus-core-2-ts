@@ -1,5 +1,5 @@
-import DAO from "../database/DAO";
-import { Consulta as Base } from "supremus-core-2-ts-base";
+import DAO from '../database/DAO';
+import { Consulta as Base } from 'supremus-core-2-ts-base';
 declare class Consulta {
     consultar(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any>[]>;
     consultarArray(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any>>;

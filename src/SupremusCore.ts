@@ -1,14 +1,13 @@
-import EstruturaVerificar from "./base/EstruturaVerificar";
-import ModelManager from "./model/ModelManager";
-import Model from "./model/Model";
-import ModelPersiste from "./model/ModelPersiste";
-import DAO from "./database/DAO";
-import Consulta from "./sql/Consulta";
-import { Consulta as Base, Persistir } from "supremus-core-2-ts-base";
-import CarregarModelsUtil from "./model/auxx/CarregarModelsUtil";
+import EstruturaVerificar from './base/EstruturaVerificar';
+import ModelManager from './model/ModelManager';
+import Model from './model/Model';
+import ModelPersiste from './model/ModelPersiste';
+import DAO from './database/DAO';
+import Consulta from './sql/Consulta';
+import { Consulta as Base, Persistir } from 'supremus-core-2-ts-base';
+import CarregarModelsUtil from './model/auxx/CarregarModelsUtil';
 
 const SupremusCore = {
-
   async carregarModels(dirModels: string) {
     await new CarregarModelsUtil().verificarPastas(dirModels);
     await new EstruturaVerificar().verificar();
@@ -26,10 +25,9 @@ const SupremusCore = {
 
   async modelPersiste(config: Persistir.ConfigPersist, dao?: DAO) {
     try {
-      const result = await new ModelPersiste().persistir(config, dao);
-      return result;
+      return await new ModelPersiste().persistir(config, dao);
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   },
 
@@ -37,7 +35,7 @@ const SupremusCore = {
     try {
       return await new Consulta().consultar(config, dao);
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   },
 
@@ -45,11 +43,14 @@ const SupremusCore = {
     try {
       return await new Consulta().consultarArray(config, dao);
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   },
 
-  async modelConsultarPorId(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<Record<string, any> | undefined> {
+  async modelConsultarPorId(
+    config: Base.ItemConsulta | Base.ItemConsulta[],
+    dao?: DAO,
+  ): Promise<Record<string, any> | undefined> {
     try {
       if (config instanceof Array) {
         throw new Error('Consulta por id não pode ser um array.');
@@ -57,7 +58,7 @@ const SupremusCore = {
 
       return await new Consulta().consultarPorId(config, dao);
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   },
 
@@ -65,11 +66,14 @@ const SupremusCore = {
     try {
       return await new Consulta().consultarSql(config, dao);
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   },
 
-  async modelConsultarPaginado(config: Base.ItemConsulta | Base.ItemConsulta[], dao?: DAO): Promise<{ totalReg: number, data: Record<string, any>[], resultFuncoes: Record<string, any>[] }> {
+  async modelConsultarPaginado(
+    config: Base.ItemConsulta | Base.ItemConsulta[],
+    dao?: DAO,
+  ): Promise<{ totalReg: number; data: Record<string, any>[]; resultFuncoes: Record<string, any>[] }> {
     try {
       if (config instanceof Array) {
         throw new Error('Consulta paginada não pode ser um array.');
@@ -77,10 +81,9 @@ const SupremusCore = {
 
       return await new Consulta().consultaPaginada(config, dao);
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   },
-
-}
+};
 
 export default SupremusCore;

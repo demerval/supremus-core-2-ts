@@ -1,12 +1,11 @@
-import { Consulta as Base } from "supremus-core-2-ts-base";
-import ModelManager from "../model/ModelManager";
-import Model from "../model/Model";
+import { Consulta as Base } from 'supremus-core-2-ts-base';
+import ModelManager from '../model/ModelManager';
+import Model from '../model/Model';
 
-const operadores = ["=", ">", "<", "<>", ">=", "<=", "LIKE", "BETWEEN"];
-const ordenadores = ["ASC", "DESC"];
+const operadores = ['=', '>', '<', '<>', '>=', '<=', 'LIKE', 'BETWEEN'];
+const ordenadores = ['ASC', 'DESC'];
 
 class SqlConsultaUtil {
-
   getCriterio(configs: Map<string, Base.SqlConsultaConfig>) {
     const criterioConsulta = [];
 
@@ -20,35 +19,33 @@ class SqlConsultaUtil {
 
       for (const c of criterios) {
         if (c instanceof Array) {
-          const crs = ["("];
-          let comparador = "";
+          const crs = ['('];
+          let comparador = '';
           for (const cr of c) {
-            comparador = cr.comparador ? cr.comparador.toUpperCase() : "AND";
+            comparador = cr.comparador ? cr.comparador.toUpperCase() : 'AND';
             const crr = this.getDadosCriterio(key, model, cr);
             crs.push(crr);
             crs.push(comparador);
           }
 
           crs.pop();
-          crs.push(")");
+          crs.push(')');
           //crs.push(comparador);
-          criterioConsulta.push(crs.join(" "), comparador);
+          criterioConsulta.push(crs.join(' '), comparador);
         } else {
           const cr = this.getDadosCriterio(key, model, c);
           criterioConsulta.push(cr);
-          criterioConsulta.push(
-            c.comparador ? c.comparador.toUpperCase() : "AND"
-          );
+          criterioConsulta.push(c.comparador ? c.comparador.toUpperCase() : 'AND');
         }
       }
     }
-    
+
     if (criterioConsulta.length === 0) {
       return undefined;
     }
 
     criterioConsulta.pop();
-    return criterioConsulta.join(" ");
+    return criterioConsulta.join(' ');
   }
 
   getDadosCriterio(key: string, model: Model, criterio: Base.CampoCriterio) {
@@ -57,27 +54,23 @@ class SqlConsultaUtil {
       throw new Error(`O campo ${criterio.campo} não foi localizado.`);
     }
 
-    const cop = criterio.operador || "=";
+    const cop = criterio.operador || '=';
     let operador = operadores.find(op => op === cop.toUpperCase());
     if (operador === undefined) {
-      throw new Error(
-        `Operador não localizado ${criterio.operador}: ${JSON.stringify(
-          criterio
-        )}`
-      );
+      throw new Error(`Operador não localizado ${criterio.operador}: ${JSON.stringify(criterio)}`);
     }
 
     const valores = [];
     if (criterio.valor instanceof Array) {
-      operador = "BETWEEN";
+      operador = 'BETWEEN';
       valores.push(campo.getValorSql(criterio.valor[0]));
-      valores.push("AND");
+      valores.push('AND');
       valores.push(campo.getValorSql(criterio.valor[1]));
     } else {
       valores.push(campo.getValorSql(criterio.valor));
     }
 
-    return `${key}.${campo.getNome()} ${operador} ${valores.join(" ")}`;
+    return `${key}.${campo.getNome()} ${operador} ${valores.join(' ')}`;
   }
 
   getDadosOrdem(configs: Map<string, Base.SqlConsultaConfig>, ordem?: string[]) {
@@ -89,7 +82,7 @@ class SqlConsultaUtil {
 
     const ordens = [];
     for (const ord of ordem) {
-      const s = ord.split(" ");
+      const s = ord.split(' ');
       const op = s[1];
       let key = key1;
       let nome = s[0];
@@ -116,7 +109,7 @@ class SqlConsultaUtil {
       }
     }
 
-    return ordens.join(", ");
+    return ordens.join(', ');
   }
 }
 
