@@ -16,6 +16,8 @@ export const ModelInsert = {
 
       await ModelUtil.validarInsertUpdate(dao, nomeTabela, dados, Enums.Status.INSERT, campoChave);
 
+      await model.onAntesPersistir(dao, dados, Enums.Status.INSERT);
+
       if (campoChave[1].getChavePrimaria()?.autoIncremento) {
         const id = await gerarId(dao, nomeTabela, campoChave);
         dados.unshift(id);
@@ -30,8 +32,6 @@ export const ModelInsert = {
         valores.push(d[2]);
         params.push('?');
       });
-
-      await model.onAntesPersistir(dao, dados, Enums.Status.INSERT);
 
       const sql = `INSERT INTO ${nomeTabela} (${campos.join(', ')}) VALUES (${params.join(', ')});`;
       await dao.executarSql(sql, valores);

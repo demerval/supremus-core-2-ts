@@ -12,6 +12,7 @@ exports.ModelInsert = {
             const nomeTabela = model.getNomeTabela();
             const campoChave = model.getChavePrimaria();
             await ModelUtil_1.ModelUtil.validarInsertUpdate(dao, nomeTabela, dados, supremus_core_2_ts_base_1.Enums.Status.INSERT, campoChave);
+            await model.onAntesPersistir(dao, dados, supremus_core_2_ts_base_1.Enums.Status.INSERT);
             if ((_a = campoChave[1].getChavePrimaria()) === null || _a === void 0 ? void 0 : _a.autoIncremento) {
                 const id = await gerarId(dao, nomeTabela, campoChave);
                 dados.unshift(id);
@@ -24,7 +25,6 @@ exports.ModelInsert = {
                 valores.push(d[2]);
                 params.push('?');
             });
-            await model.onAntesPersistir(dao, dados, supremus_core_2_ts_base_1.Enums.Status.INSERT);
             const sql = `INSERT INTO ${nomeTabela} (${campos.join(', ')}) VALUES (${params.join(', ')});`;
             await dao.executarSql(sql, valores);
             await model.onDepoisPersistir(dao, dados, supremus_core_2_ts_base_1.Enums.Status.INSERT);

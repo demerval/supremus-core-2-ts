@@ -7,7 +7,7 @@ declare class STQuery {
     model(nomeModel: string): STQuery;
     join(nomeModel: string, on: [string, string], joinFunc?: JoinFunction): STQuery;
     joinTipo(tipo: JoinTipo): STQuery;
-    campos(campo: string | string[]): STQuery;
+    campos(...campo: string[]): STQuery;
     criterioAnd(campo: string, valor: any, operador?: Operador): STQuery;
     criterioOr(campo: string, valor: any, operador?: Operador): STQuery;
     criterioGroup(GroupCriterioFunc: GroupCriterioFunction): STQuery;

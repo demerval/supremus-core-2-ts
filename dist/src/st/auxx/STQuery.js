@@ -31,7 +31,7 @@ class STQuery {
         this._config.joinTipo = tipo;
         return this;
     }
-    campos(campo) {
+    campos(...campo) {
         this._config.addCampo(campo);
         return this;
     }

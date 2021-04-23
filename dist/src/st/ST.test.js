@@ -13,7 +13,7 @@ describe('Teste basico ST', () => {
         await SupremusCore_1.default.carregarModels(path_1.default.resolve('test', 'models'));
         const select = ST_1.default()
             .select('usuario')
-            .campos(['id', 'nome'])
+            .campos('id', 'nome')
             .join('usuarioPermissao', ['usuario.id', 'usuarioPermissao.idUsuario'], st => st.joinTipo('left').campos('permissao').criterio('id', 20).ordem('permissao'))
             .criterio('id', 10)
             //.criterio('ativo', true)

@@ -31,4 +31,3 @@ class default_1 {
     }
 }
 exports.default = default_1;
-;
