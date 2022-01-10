@@ -6,7 +6,7 @@ import { Enums } from 'supremus-core-2-ts-base';
 import { ModelConverter } from './ModelConverter';
 
 const replicar = process.env.REPLICAR !== undefined ? (process.env.REPLICAR === 'true' ? true : false) : false;
-const codReplicar = process.env.REPLICAR_COD !== undefined ? Number(process.env.REPLICAR_COD) : '001';
+const codReplicar = process.env.REPLICAR_COD !== undefined ? process.env.REPLICAR_COD : '001';
 
 export const ModelInsert = {
   async persiste(dao: DAO, model: Model, dados: Dados[]) {
@@ -52,8 +52,9 @@ async function gerarId(dao: DAO, nomeTabela: string, campoChave: [string, Campo]
   const nomeGerador = campo.getChavePrimaria()?.nomeGerador || `${nomeTabela}_GEN`;
   let id = await dao.gerarId(nomeGerador);
   if (replicar && campo.isNaoReplicar() === undefined) {
-    id = id + codReplicar;
+    let newId = id.toString() + codReplicar;
+    return campo.getDados(parseInt(newId, 10), key);
   }
 
-  return campo.getDados(parseInt(id, 10), key);
+  return campo.getDados(id, key);
 }
