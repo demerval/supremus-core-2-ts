@@ -4,7 +4,7 @@ const ModelUtil_1 = require("./ModelUtil");
 const supremus_core_2_ts_base_1 = require("supremus-core-2-ts-base");
 const ModelConverter_1 = require("./ModelConverter");
 const replicar = process.env.REPLICAR !== undefined ? (process.env.REPLICAR === 'true' ? true : false) : false;
-const codReplicar = process.env.REPLICAR_COD !== undefined ? Number(process.env.REPLICAR_COD) : '001';
+const codReplicar = process.env.REPLICAR_COD !== undefined ? process.env.REPLICAR_COD : '001';
 exports.ModelInsert = {
     async persiste(dao, model, dados) {
         var _a;
@@ -42,7 +42,8 @@ async function gerarId(dao, nomeTabela, campoChave) {
     const nomeGerador = ((_a = campo.getChavePrimaria()) === null || _a === void 0 ? void 0 : _a.nomeGerador) || `${nomeTabela}_GEN`;
     let id = await dao.gerarId(nomeGerador);
     if (replicar && campo.isNaoReplicar() === undefined) {
-        id = id + codReplicar;
+        let newId = id.toString() + codReplicar;
+        return campo.getDados(parseInt(newId, 10), key);
     }
-    return campo.getDados(parseInt(id, 10), key);
+    return campo.getDados(id, key);
 }
