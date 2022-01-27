@@ -1,6 +1,6 @@
-import DAO from "../../database/DAO";
-import { EstruturaConfig } from "./EstruturaUtil";
-import Campo from "../../campos/abstract/Campo";
+import DAO from '../../database/DAO';
+import { EstruturaConfig } from './EstruturaUtil';
+import Campo from '../../campos/abstract/Campo';
 export declare const TabelaAjustar: {
     verificarTabela(dao: DAO, config: EstruturaConfig): Promise<true | any[]>;
     ajustarTabela(dao: DAO, config: EstruturaConfig): Promise<boolean>;
