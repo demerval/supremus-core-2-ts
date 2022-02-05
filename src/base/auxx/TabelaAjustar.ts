@@ -23,6 +23,7 @@ export const TabelaAjustar = {
     }
 
     if (config.versao <= rows[0].VERSAO) {
+      await config.onEstruturaVerificada(dao);
       return true;
     }
 

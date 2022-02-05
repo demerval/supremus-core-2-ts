@@ -18,6 +18,7 @@ exports.TabelaAjustar = {
             return await TabelaUtil_1.TabelaUtil.atualizarVersaoTabela(dao, config);
         }
         if (config.versao <= rows[0].VERSAO) {
+            await config.onEstruturaVerificada(dao);
             return true;
         }
         await this.ajustarTabela(dao, config);
