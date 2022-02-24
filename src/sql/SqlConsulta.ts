@@ -33,14 +33,14 @@ class SqlConsulta {
           }
 
           if (c.tipo === Enums.FieldType.BLOB) {
-            camposAgrupar.push(`CAST(${c.keyTabela}.${c.nomeCampo} AS VARCHAR(20000))`);
+            camposAgrupar.push(`CAST(${c.keyTabela}.${c.nomeCampo} AS VARCHAR(6144))`);
           } else {
             camposAgrupar.push(`${c.keyTabela}.${c.nomeCampo}`);
           }
         }
 
         if (c.tipo === Enums.FieldType.BLOB) {
-          return `CAST (${c.keyTabela}.${c.nomeCampo} AS VARCHAR(20000)) AS ${c.alias}`;
+          return `CAST (${c.keyTabela}.${c.nomeCampo} AS VARCHAR(6144)) AS ${c.alias}`;
         }
 
         return `${c.keyTabela}.${c.nomeCampo} AS ${c.alias}`;
