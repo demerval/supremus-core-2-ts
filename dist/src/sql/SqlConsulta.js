@@ -26,14 +26,14 @@ class SqlConsulta {
                         return `${c.funcao}(${c.keyTabela}.${c.nomeCampo}) AS ${c.alias}`;
                     }
                     if (c.tipo === supremus_core_2_ts_base_1.Enums.FieldType.BLOB) {
-                        camposAgrupar.push(`CAST(${c.keyTabela}.${c.nomeCampo} AS VARCHAR(4096))`);
+                        camposAgrupar.push(`CAST(${c.keyTabela}.${c.nomeCampo} AS VARCHAR(20000))`);
                     }
                     else {
                         camposAgrupar.push(`${c.keyTabela}.${c.nomeCampo}`);
                     }
                 }
                 if (c.tipo === supremus_core_2_ts_base_1.Enums.FieldType.BLOB) {
-                    return `CAST (${c.keyTabela}.${c.nomeCampo} AS VARCHAR(4096)) AS ${c.alias}`;
+                    return `CAST (${c.keyTabela}.${c.nomeCampo} AS VARCHAR(20000)) AS ${c.alias}`;
                 }
                 return `${c.keyTabela}.${c.nomeCampo} AS ${c.alias}`;
             });
